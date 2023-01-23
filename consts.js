@@ -1,10 +1,13 @@
 const height = window.innerHeight;
+export const WIDTH = window.innerWidth;
 export const HEIGHT = Math.floor(height / 50) * 50;
 const point = HEIGHT / 500;
+export const BODY = document.querySelector("body");
 export const CANVAS = document.querySelector("canvas");
 export const CTX = CANVAS.getContext("2d");
 export const DATA = document.getElementById("data");
 export const SCORE = document.getElementById("score");
+export const ARTICLE = document.querySelector("article");
 export const LIFES = document.getElementById("lifes");
 export const POPUP = document.getElementById("popup");
 export const BUTTON = document.querySelector("button");

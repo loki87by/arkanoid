@@ -1,9 +1,12 @@
 import {
+  WIDTH,
   HEIGHT,
+  BODY,
   CANVAS,
   CTX,
   DATA,
   SCORE,
+  ARTICLE,
   LIFES,
   POPUP,
   BUTTON,
@@ -16,12 +19,21 @@ import {
 
 CANVAS.setAttribute("height", HEIGHT);
 CANVAS.setAttribute("width", HEIGHT / 1.25);
-DATA.setAttribute(
-  "style",
-  `width: ${(window.innerWidth - HEIGHT / 1.25) / 2}px; left: ${
-    window.innerWidth - (window.innerWidth - HEIGHT / 1.25) / 2
-  }px`
-);
+if (HEIGHT < WIDTH) {
+  DATA.setAttribute(
+    "style",
+    `width: ${(WIDTH - HEIGHT / 1.25) / 2}px; left: ${
+      WIDTH - (WIDTH - HEIGHT / 1.25) / 2
+    }px`
+  );
+} else {
+  BODY.setAttribute("style", "align-items: flex-start");
+  DATA.setAttribute("style", `left: 0; top: ${GET_SIZE(454)}px; width: 100%;`);
+  ARTICLE.setAttribute("style", "flex-direction: row");
+  Array.from(document.querySelectorAll("h2")).forEach((subtitle) =>
+    subtitle.setAttribute("style", "margin: 0")
+  );
+}
 
 const requestAnimationFrame =
   window.requestAnimationFrame ||
@@ -119,6 +131,7 @@ function reset() {
   win = false;
   isDropped = false;
   timestamp = Date.now();
+  ball.speed = level / 5 + 1.8;
   for (let i = 0; i < bricks.length; i++) {
     bricks.pop();
   }
