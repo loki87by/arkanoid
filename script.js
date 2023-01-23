@@ -7,7 +7,6 @@ import {
   DATA,
   SCORE,
   ARTICLE,
-  LIFES,
   POPUP,
   BUTTON,
   BASIC_TIME,
@@ -15,25 +14,9 @@ import {
   COLORS,
   GET_SIZE,
   COLLIDES,
+  SET_LIVES,
+  SHOW_POPUP,
 } from "./consts.js";
-
-CANVAS.setAttribute("height", HEIGHT);
-CANVAS.setAttribute("width", HEIGHT / 1.25);
-if (HEIGHT < WIDTH) {
-  DATA.setAttribute(
-    "style",
-    `width: ${(WIDTH - HEIGHT / 1.25) / 2}px; left: ${
-      WIDTH - (WIDTH - HEIGHT / 1.25) / 2
-    }px`
-  );
-} else {
-  BODY.setAttribute("style", "align-items: flex-start");
-  DATA.setAttribute("style", `left: 0; top: ${GET_SIZE(454)}px; width: 100%;`);
-  ARTICLE.setAttribute("style", "flex-direction: row");
-  Array.from(document.querySelectorAll("h2")).forEach((subtitle) =>
-    subtitle.setAttribute("style", "margin: 0")
-  );
-}
 
 const requestAnimationFrame =
   window.requestAnimationFrame ||
@@ -41,10 +24,6 @@ const requestAnimationFrame =
   window.webkitRequestAnimationFrame ||
   window.msRequestAnimationFrame;
 
-let level = 1;
-let lifes = 5;
-let score = 0;
-let timeCoefficient, gameOver, win, isDropped, timestamp;
 const brickGap = GET_SIZE(2);
 const brickWidth = GET_SIZE(25);
 const brickHeight = GET_SIZE(12);
@@ -74,6 +53,30 @@ const ball = {
 };
 
 const bricks = [];
+
+let level = 1;
+let lifes = 5;
+let score = 0;
+let timeCoefficient, gameOver, win, isDropped, timestamp;
+
+CANVAS.setAttribute("height", HEIGHT);
+CANVAS.setAttribute("width", HEIGHT / 1.25);
+
+if (HEIGHT < WIDTH) {
+  DATA.setAttribute(
+    "style",
+    `width: ${(WIDTH - HEIGHT / 1.25) / 2}px; left: ${
+      WIDTH - (WIDTH - HEIGHT / 1.25) / 2
+    }px`
+  );
+} else {
+  BODY.setAttribute("style", "align-items: flex-start");
+  DATA.setAttribute("style", `left: 0; top: ${GET_SIZE(454)}px; width: 100%;`);
+  ARTICLE.setAttribute("style", "flex-direction: row");
+  Array.from(document.querySelectorAll("h2")).forEach((subtitle) =>
+    subtitle.setAttribute("style", "margin: 0")
+  );
+}
 
 function keydownHandler(e) {
   if (e.code === "ArrowLeft") {
@@ -115,16 +118,6 @@ function keyupHandler(e) {
   }
 }
 
-function setLives() {
-  Array.from(LIFES.children)
-    .slice(1)
-    .forEach((img) => img.remove());
-  for (let i = 0; i < lifes; i++) {
-    const svg = LIFES.children[0].content.querySelector("img").cloneNode(true);
-    LIFES.appendChild(svg);
-  }
-}
-
 function reset() {
   timeCoefficient = BASIC_TIME - level * 5000;
   gameOver = false;
@@ -153,7 +146,7 @@ function reset() {
 function addLife() {
   if (lifes < 5) {
     lifes++;
-    setLives();
+    SET_LIVES(lifes);
   }
 }
 
@@ -161,7 +154,7 @@ function restart() {
   level = 1;
   reset();
   lifes = 5;
-  setLives();
+  SET_LIVES(lifes);
   score = 0;
   SCORE.textContent = `Счёт: ${score}`;
   BUTTON.removeEventListener("click", restart);
@@ -182,14 +175,10 @@ function endGame() {
   timeCoefficient = timestamp;
 
   if (gameOver) {
-    POPUP.children[0].textContent = "Game over!";
-    BUTTON.textContent = "Попробовать еще раз";
-    BUTTON.addEventListener("click", restart);
+    SHOW_POPUP("Game over!", "Попробовать еще раз", restart);
   }
   if (win) {
-    POPUP.children[0].textContent = "You win!";
-    BUTTON.textContent = "Следующий уровень";
-    BUTTON.addEventListener("click", newGame);
+    SHOW_POPUP("You win!", "Следующий уровень", newGame);
   }
 }
 
@@ -255,7 +244,7 @@ function loop() {
   if (ball.y > CANVAS.height) {
     toStartPosition();
     lifes--;
-    setLives();
+    SET_LIVES(lifes);
 
     if (lifes === 0) {
       gameOver = true;
@@ -317,5 +306,5 @@ function loop() {
 document.addEventListener("keydown", keydownHandler);
 document.addEventListener("keyup", keyupHandler);
 reset();
-setLives();
+SET_LIVES(lifes);
 requestAnimationFrame(loop);
