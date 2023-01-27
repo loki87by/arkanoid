@@ -37,6 +37,19 @@ export const COLORS = {
   G: "green",
   Y: "yellow",
 };
+
+export const BONUSES = [
+  "longPaddle",
+  "berserk",
+  "slowDown",
+  "backup",
+  "addLife",
+  "auto",
+  "grab",
+  "bomb",
+  "doubleScore",
+];
+
 export const GET_SIZE = (num) => {
   return Math.floor(num * point);
 };
@@ -64,4 +77,40 @@ export const SHOW_POPUP = (title, text, func) => {
   POPUP.children[0].textContent = title;
   BUTTON.textContent = text;
   BUTTON.addEventListener("click", func);
+};
+
+const findAim = (array, coords) => {
+  const index = array.findIndex((brick) => {
+    if (brick.x === coords.x && brick.y === coords.y) {
+      return brick;
+    }
+  });
+
+  if (index >= 0) {
+    array.splice(index, 1);
+  }
+};
+
+export const DETONATE = (array, brick, vertical, horizontal) => {
+  const targets = [
+    { x: brick.x, y: brick.y },
+    // ближние точки
+    { x: brick.x - horizontal, y: brick.y },
+    { x: brick.x, y: brick.y - vertical },
+    { x: brick.x + horizontal, y: brick.y },
+    { x: brick.x, y: brick.y + vertical },
+    // дальние точки
+    { x: brick.x - horizontal * 2, y: brick.y },
+    { x: brick.x, y: brick.y - vertical * 2 },
+    { x: brick.x + horizontal * 2, y: brick.y },
+    { x: brick.x, y: brick.y + vertical * 2 },
+    // перекрестия
+    { x: brick.x - horizontal, y: brick.y - vertical },
+    { x: brick.x - horizontal, y: brick.y + vertical },
+    { x: brick.x + horizontal, y: brick.y + vertical },
+    { x: brick.x + horizontal, y: brick.y - vertical },
+  ];
+  targets.forEach((target) => {
+    findAim(array, target);
+  });
 };

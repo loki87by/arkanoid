@@ -12,10 +12,12 @@ import {
   BASIC_TIME,
   LEVEL1,
   COLORS,
+  BONUSES,
   GET_SIZE,
   COLLIDES,
   SET_LIVES,
   SHOW_POPUP,
+  DETONATE,
 } from "./consts.js";
 
 const requestAnimationFrame =
@@ -46,10 +48,17 @@ const ball = {
   diameter: GET_SIZE(5),
   height: GET_SIZE(5),
   width: GET_SIZE(5),
-  radius: GET_SIZE(5) / 2,
   speed: 2,
   dx: 0,
   dy: 0,
+};
+
+const prize = {
+  x: null,
+  y: null,
+  width: brickWidth,
+  height: brickHeight,
+  dy: 1,
 };
 
 const bricks = [];
@@ -57,7 +66,16 @@ const bricks = [];
 let level = 1;
 let lifes = 5;
 let score = 0;
-let timeCoefficient, gameOver, win, isDropped, timestamp;
+let timeCoefficient,
+  gameOver,
+  win,
+  isDropped,
+  timestamp,
+  berserk,
+  autopilot,
+  grab,
+  doubleScore,
+  bomb;
 
 CANVAS.setAttribute("height", HEIGHT);
 CANVAS.setAttribute("width", HEIGHT / 1.25);
@@ -118,11 +136,30 @@ function keyupHandler(e) {
   }
 }
 
+function resetPaddle() {
+  paddle.x = paddle.basicX;
+  paddle.y = paddle.basicY;
+  paddle.width = brickWidth;
+}
+
+function resetBall() {
+  ball.width = GET_SIZE(5);
+  ball.height = GET_SIZE(5);
+  ball.diameter = GET_SIZE(5);
+}
+
 function reset() {
+  resetPaddle();
+  resetBall();
   timeCoefficient = BASIC_TIME - level * 5000;
   gameOver = false;
   win = false;
+  grab = false;
+  bomb = false;
+  doubleScore = false;
+  autopilot = false;
   isDropped = false;
+  berserk = false;
   timestamp = Date.now();
   ball.speed = level / 5 + 1.8;
   for (let i = 0; i < bricks.length; i++) {
@@ -193,6 +230,65 @@ function toStartPosition() {
   isDropped = false;
 }
 
+function chekPrize(text) {
+  console.log(text);
+  if (text === "longPaddle") {
+    const width = paddle.width;
+
+    if (width + brickWidth < brickWidth * 14) {
+      paddle.width = width + brickWidth;
+    }
+  } else if (text === "berserk") {
+    berserk = true;
+  } else if (text === "slowDown") {
+    timeCoefficient += 15000;
+  } else if (text === "backup") {
+    bricks.forEach((brick) => {
+      brick.y -= brick.height + brickGap;
+    });
+  } else if (text === "addLife") {
+    if (lifes < 5) {
+      addLife();
+    }
+  } else if (text === "auto") {
+    autopilot = true;
+    setTimeout(() => {
+      autopilot = false;
+    }, 20000);
+  } else if (text === "grab") {
+    grab = true;
+    setTimeout(() => {
+      grab = false;
+    }, timeCoefficient * .75);
+  } else if (text === "bomb") {
+    if (!bomb && !grab) {
+      bomb = true;
+      const ballSize = ball.diameter * 2;
+      ball.width = ballSize;
+      ball.height = ballSize;
+      ball.diameter = ballSize;
+    } else {
+      return chekPrize(BONUSES[Math.floor(Math.random() * BONUSES.length)]);
+    }
+  } else if (text === "doubleScore") {
+    if (!doubleScore) {
+      doubleScore = true;
+      setTimeout(() => {
+        doubleScore = false;
+      }, timeCoefficient / 2);
+    } else {
+      return chekPrize(BONUSES[Math.floor(Math.random() * BONUSES.length)]);
+    }
+  }
+}
+
+function setPrize(startCoords) {
+  if (prize.x === null && prize.y === null) {
+    prize.x = startCoords.x;
+    prize.y = startCoords.y;
+  }
+}
+
 function loop() {
   if (!gameOver) {
     requestAnimationFrame(loop);
@@ -222,11 +318,28 @@ function loop() {
 
   if (paddle.x < wallSize) {
     paddle.x = wallSize;
-  } else if (paddle.x + brickWidth > CANVAS.width - wallSize) {
-    paddle.x = CANVAS.width - wallSize - brickWidth;
+  } else if (paddle.x + paddle.width > CANVAS.width - wallSize) {
+    paddle.x = CANVAS.width - wallSize - paddle.width;
   }
   ball.x += ball.dx;
   ball.y += ball.dy;
+
+  if (prize.y) {
+    prize.y += prize.dy;
+  }
+
+  if (autopilot) {
+    if (ball.x <= wallSize + paddle.width / 2) {
+      paddle.x = ball.x;
+    } else if (
+      ball.x + ball.width >=
+      HEIGHT / 1.25 - wallSize * 2 - paddle.width / 2
+    ) {
+      paddle.x = ball.x - paddle.width;
+    } else {
+      paddle.x = ball.x - paddle.width / 2;
+    }
+  }
 
   if (ball.x < wallSize) {
     ball.x = wallSize;
@@ -245,23 +358,69 @@ function loop() {
     toStartPosition();
     lifes--;
     SET_LIVES(lifes);
+    berserk = false;
+    resetPaddle();
 
     if (lifes === 0) {
       gameOver = true;
     }
   }
 
+  if (prize.y > CANVAS.height) {
+    prize.x = null;
+    prize.y = null;
+  }
+
   if (COLLIDES(ball, paddle)) {
-    ball.dy *= -1;
-    ball.y = paddle.y - ball.height;
+    if (!grab) {
+      ball.dy *= -1;
+      ball.y = paddle.y - ball.height;
+    } else {
+      /* resetBall()
+      resetPaddle() */
+      ball.dx = 0;
+      ball.dy = 0;
+      ball.x = paddle.x + paddle.width / 2;
+
+      if (!bomb) {
+      ball.y = ball.basicY
+      } else {
+        ball.y = ball.basicY + GET_SIZE(5) - ball.diameter
+      }
+      isDropped = false;
+    }
+  }
+
+  if (ball.y - wallSize <= ball.diameter + brickGap) {
+    berserk = false;
   }
 
   for (let i = 0; i < bricks.length; i++) {
     const brick = bricks[i];
 
     if (COLLIDES(ball, brick)) {
-      bricks.splice(i, 1);
+      if (Math.floor(Math.random() * 10) === Math.ceil(Math.random() * 9)) {
+        setPrize(brick);
+      }
+
+      if (bomb) {
+        bomb = false;
+        resetBall();
+        DETONATE(
+          bricks,
+          bricks[i],
+          brickHeight + brickGap,
+          brickWidth + brickGap
+        );
+      } else {
+        bricks.splice(i, 1);
+      }
+
       score++;
+
+      if (doubleScore) {
+        score++;
+      }
       SCORE.textContent = `Счёт: ${score}`;
 
       if (score % 100 === 0) {
@@ -275,8 +434,8 @@ function loop() {
       }
 
       if (
-        ball.y + ball.height - ball.speed <= brick.y ||
-        ball.y >= brick.y + brick.height - ball.speed
+        (!berserk && ball.y + ball.height - ball.speed <= brick.y) ||
+        (ball.y >= brick.y + brick.height - ball.speed && !berserk)
       ) {
         ball.dy *= -1;
       } else {
@@ -284,6 +443,12 @@ function loop() {
       }
       break;
     }
+  }
+
+  if (COLLIDES(paddle, prize)) {
+    prize.x = null;
+    prize.y = null;
+    chekPrize(BONUSES[Math.floor(Math.random() * BONUSES.length)]);
   }
 
   CTX.fillStyle = "lightgrey";
@@ -301,6 +466,11 @@ function loop() {
 
   CTX.fillStyle = "cyan";
   CTX.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+
+  if (prize.y && prize.y % 2 === 0) {
+    CTX.fillStyle = "violet";
+    CTX.fillRect(prize.x, prize.y, prize.width * .8, prize.width * .8);
+  }
 }
 
 document.addEventListener("keydown", keydownHandler);
