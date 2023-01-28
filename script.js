@@ -16,6 +16,8 @@ import {
   COLLIDES,
   SET_LIVES,
   SHOW_POPUP,
+  DETONATE,
+  GET_PRIZE,
 } from "./consts.js";
 
 const requestAnimationFrame =
@@ -23,6 +25,7 @@ const requestAnimationFrame =
   window.mozRequestAnimationFrame ||
   window.webkitRequestAnimationFrame ||
   window.msRequestAnimationFrame;
+window.msRequestAnimationFrame;
 
 const brickGap = GET_SIZE(2);
 const brickWidth = GET_SIZE(25);
@@ -57,7 +60,17 @@ const bricks = [];
 let level = 1;
 let lifes = 5;
 let score = 0;
-let timeCoefficient, gameOver, win, isDropped, timestamp;
+let timeCoefficient,
+  gameOver,
+  win,
+  isDropped,
+  timestamp,
+  berserk,
+  autopilot,
+  grab,
+  doubleScore,
+  bomb,
+  prizeColor;
 
 CANVAS.setAttribute("height", HEIGHT);
 CANVAS.setAttribute("width", HEIGHT / 1.25);
@@ -151,6 +164,7 @@ function addLife() {
 }
 
 function restart() {
+  CTX.clearRect(0, 0, CANVAS.width, CANVAS.height);
   level = 1;
   reset();
   lifes = 5;
@@ -191,6 +205,66 @@ function toStartPosition() {
   ball.dy = 0;
   paddle.dx = 0;
   isDropped = false;
+}
+
+function chekPrize(text) {
+  console.log(text);
+  if (text === "longPaddle") {
+    const width = paddle.width;
+
+    if (width + brickWidth < brickWidth * 14) {
+      paddle.width = width + brickWidth;
+    }
+  } else if (text === "berserk") {
+    berserk = true;
+  } else if (text === "slowDown") {
+    timeCoefficient += 15000;
+  } else if (text === "backup") {
+    bricks.forEach((brick) => {
+      brick.y -= brick.height + brickGap;
+    });
+  } else if (text === "addLife") {
+    if (lifes < 5) {
+      addLife();
+    }
+  } else if (text === "auto") {
+    autopilot = true;
+    setTimeout(() => {
+      autopilot = false;
+    }, 20000);
+  } else if (text === "grab") {
+    grab = true;
+    setTimeout(() => {
+      grab = false;
+    }, timeCoefficient * 0.75);
+  } else if (text === "bomb") {
+    if (!bomb && !grab) {
+      bomb = true;
+      const ballSize = ball.diameter * 2;
+      ball.width = ballSize;
+      ball.height = ballSize;
+      ball.diameter = ballSize;
+    } else {
+      return chekPrize(BONUSES[Math.floor(Math.random() * BONUSES.length)]);
+    }
+  } else if (text === "doubleScore") {
+    if (!doubleScore) {
+      doubleScore = true;
+      setTimeout(() => {
+        doubleScore = false;
+      }, timeCoefficient / 2);
+    } else {
+      return chekPrize(BONUSES[Math.floor(Math.random() * BONUSES.length)]);
+    }
+  }
+}
+
+function setPrize(startCoords) {
+  if (prize.x === null && prize.y === null) {
+    prize.x = startCoords.x;
+    prize.y = startCoords.y;
+    prize.color = startCoords.color;
+  }
 }
 
 function loop() {
@@ -252,15 +326,49 @@ function loop() {
   }
 
   if (COLLIDES(ball, paddle)) {
-    ball.dy *= -1;
-    ball.y = paddle.y - ball.height;
+    if (!grab) {
+      ball.dy *= -1;
+      ball.y = paddle.y - ball.height;
+    } else {
+      ball.dx = 0;
+      ball.dy = 0;
+      ball.x = paddle.x + paddle.width / 2;
+
+      if (!bomb) {
+        ball.y = ball.basicY;
+      } else {
+        ball.y = ball.basicY + GET_SIZE(5) - ball.diameter;
+      }
+      isDropped = false;
+    }
+  }
+
+  if (ball.y - wallSize <= ball.diameter + brickGap) {
+    berserk = false;
   }
 
   for (let i = 0; i < bricks.length; i++) {
     const brick = bricks[i];
 
     if (COLLIDES(ball, brick)) {
-      bricks.splice(i, 1);
+      if (Math.floor(Math.random() * 10) === Math.ceil(Math.random() * 9)) {
+        prizeColor = brick.color;
+        setPrize(brick);
+      }
+
+      if (bomb) {
+        bomb = false;
+        resetBall();
+        DETONATE(
+          bricks,
+          bricks[i],
+          brickHeight + brickGap,
+          brickWidth + brickGap
+        );
+      } else {
+        bricks.splice(i, 1);
+      }
+
       score++;
       SCORE.textContent = `Счёт: ${score}`;
 
@@ -286,6 +394,13 @@ function loop() {
     }
   }
 
+  if (COLLIDES(paddle, prize)) {
+    prize.x = null;
+    prize.y = null;
+    prizeColor = "";
+    chekPrize(BONUSES[Math.floor(Math.random() * BONUSES.length)]);
+  }
+
   CTX.fillStyle = "lightgrey";
   CTX.fillRect(0, 0, CANVAS.width, wallSize);
   CTX.fillRect(0, 0, wallSize, CANVAS.height);
@@ -301,6 +416,10 @@ function loop() {
 
   CTX.fillStyle = "cyan";
   CTX.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+
+  if (prize.y && prize.y % 2 === 0) {
+    GET_PRIZE(prize.x, prize.y, prize.width / 2, prizeColor);
+  }
 }
 
 document.addEventListener("keydown", keydownHandler);
