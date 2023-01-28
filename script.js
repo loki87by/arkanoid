@@ -467,7 +467,7 @@ function loop() {
   CTX.fillStyle = "cyan";
   CTX.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
 
-  if (prize.y && prize.y % 2 === 0) {
+  if (prize.y /*&& prize.y % 2 === 0 */) {
     CTX.fillStyle = "violet";
     CTX.fillRect(prize.x, prize.y, prize.width * .8, prize.width * .8);
   }
