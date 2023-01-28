@@ -18,13 +18,14 @@ import {
   SET_LIVES,
   SHOW_POPUP,
   DETONATE,
+  GET_PRIZE,
 } from "./consts.js";
 
-/* const requestAnimationFrame =
+const requestAnimationFrame =
   window.requestAnimationFrame ||
   window.mozRequestAnimationFrame ||
   window.webkitRequestAnimationFrame ||
-  window.msRequestAnimationFrame; */
+  window.msRequestAnimationFrame;
 
 const brickGap = GET_SIZE(2);
 const brickWidth = GET_SIZE(25);
@@ -75,7 +76,8 @@ let timeCoefficient,
   autopilot,
   grab,
   doubleScore,
-  bomb;
+  bomb,
+  prizeColor;
 
 CANVAS.setAttribute("height", HEIGHT);
 CANVAS.setAttribute("width", HEIGHT / 1.25);
@@ -188,6 +190,7 @@ function addLife() {
 }
 
 function restart() {
+  CTX.clearRect(0, 0, CANVAS.width, CANVAS.height);
   level = 1;
   reset();
   lifes = 5;
@@ -259,7 +262,7 @@ function chekPrize(text) {
     grab = true;
     setTimeout(() => {
       grab = false;
-    }, timeCoefficient * .75);
+    }, timeCoefficient * 0.75);
   } else if (text === "bomb") {
     if (!bomb && !grab) {
       bomb = true;
@@ -286,6 +289,7 @@ function setPrize(startCoords) {
   if (prize.x === null && prize.y === null) {
     prize.x = startCoords.x;
     prize.y = startCoords.y;
+    prize.color = startCoords.color;
   }
 }
 
@@ -376,16 +380,14 @@ function loop() {
       ball.dy *= -1;
       ball.y = paddle.y - ball.height;
     } else {
-      /* resetBall()
-      resetPaddle() */
       ball.dx = 0;
       ball.dy = 0;
       ball.x = paddle.x + paddle.width / 2;
 
       if (!bomb) {
-      ball.y = ball.basicY
+        ball.y = ball.basicY;
       } else {
-        ball.y = ball.basicY + GET_SIZE(5) - ball.diameter
+        ball.y = ball.basicY + GET_SIZE(5) - ball.diameter;
       }
       isDropped = false;
     }
@@ -400,6 +402,7 @@ function loop() {
 
     if (COLLIDES(ball, brick)) {
       if (Math.floor(Math.random() * 10) === Math.ceil(Math.random() * 9)) {
+        prizeColor = brick.color;
         setPrize(brick);
       }
 
@@ -448,6 +451,7 @@ function loop() {
   if (COLLIDES(paddle, prize)) {
     prize.x = null;
     prize.y = null;
+    prizeColor = "";
     chekPrize(BONUSES[Math.floor(Math.random() * BONUSES.length)]);
   }
 
@@ -467,9 +471,8 @@ function loop() {
   CTX.fillStyle = "cyan";
   CTX.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
 
-  if (prize.y /*&& prize.y % 2 === 0 */) {
-    CTX.fillStyle = "violet";
-    CTX.fillRect(prize.x, prize.y, prize.width * .8, prize.width * .8);
+  if (prize.y && prize.y % 2 === 0) {
+    GET_PRIZE(prize.x, prize.y, prize.width / 2, prizeColor);
   }
 }
 
