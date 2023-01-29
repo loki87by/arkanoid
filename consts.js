@@ -39,15 +39,15 @@ export const COLORS = {
 };
 
 export const BONUSES = [
-  "longPaddle",
-  "berserk",
-  "slowDown",
-  "backup",
-  "addLife",
   "auto",
-  "grab",
   "bomb",
   "doubleScore",
+  "grab",
+  "life",
+  "rise",
+  "slowDown",
+  "wide",
+  "up",
 ];
 
 export const GET_SIZE = (num) => {
@@ -115,16 +115,15 @@ export const DETONATE = (array, brick, vertical, horizontal) => {
   });
 };
 
-export const GET_PRIZE = (x, y, w, color) => {
+export const GET_PRIZE = (x, y, w, color, name) => {
   CTX.fillStyle = color;
-  CTX.beginPath();
-  CTX.arc(x, y, w, 0, 2 * Math.PI);
+  CTX.arc(x, y - 0.3 * w, w, 0, 2 * Math.PI);
   CTX.fill();
-  CTX.fillStyle = "violet";
+  CTX.fillStyle = "darkmagenta";
   CTX.beginPath();
   CTX.moveTo(x - w - 1 + w * 1.3, y - w - 1.33 * w + w * 0.9);
   CTX.bezierCurveTo(
-    x - w - 1 + w * 0.3,
+    x - w - 1 + w * 1.3,
     y - w - 1.33 * w + w * 0.93,
     x - w - 1 + w * 1.27,
     y - w - 1.33 * w + w * 0.97,
@@ -203,8 +202,11 @@ export const GET_PRIZE = (x, y, w, color) => {
     x - w - 1 + w * 1.3,
     y - w - 1.33 * w + w * 0.9
   );
+  CTX.closePath();
+  CTX.fill();
+  CTX.beginPath();
   CTX.moveTo(x - w - 1 + w * 0.73, y - w - 1.33 * w + w * 0.77);
-  CTX.lineTo(x - w - 1 + w * 0.37, y - w - 1.33 * w + w * 0.67);
+  CTX.lineTo(x - w - 1 + w * 0.27, y - w - 1.33 * w + w * 0.63);
   CTX.bezierCurveTo(
     x - w - 1 + w * 0.27,
     y - w - 1.33 * w + w * 0.63,
@@ -213,16 +215,16 @@ export const GET_PRIZE = (x, y, w, color) => {
     x - w - 1 + w * 0.17,
     y - w - 1.33 * w + w * 0.83
   );
-  CTX.lineTo(x - w - 1 + w * 0.17, x - w - 1 + w * 1);
+  CTX.lineTo(x - w - 1 + w * 0.17, y - w - 1.33 * w + w * 1);
   CTX.bezierCurveTo(
     x - w - 1 + w * 0.17,
     y - w - 1.33 * w + w * 1.1,
     x - w - 1 + w * 0.27,
     y - w - 1.33 * w + w * 1.17,
-    x - w - 1 + w * 0.37,
+    x - w - 1 + w * 0.33,
     y - w - 1.33 * w + w * 1.13
   );
-  CTX.lineTo(x - w - 1 + w * 0.7, y - w - 1.33 * w + w * 1.3);
+  CTX.lineTo(x - w - 1 + w * 0.7, y - w - 1.33 * w + w * 1.03);
   CTX.lineTo(x - w - 1 + w * 0.77, y - w - 1.33 * w + w * 1);
   CTX.lineTo(x - w - 1 + w * 0.8, y - w - 1.33 * w + w * 1);
   CTX.bezierCurveTo(
@@ -241,9 +243,11 @@ export const GET_PRIZE = (x, y, w, color) => {
     x - w - 1 + w * 0.8,
     y - w - 1.33 * w + w * 0.77
   );
-  CTX.lineTo(x - w - 1 + w * 0.73, y - w - 1.33 * w + w * 0.77);
+  CTX.lineTo(x - w - 1 + w * 0.73, y - w - 1.33 * w + w * 0.77); ///
+  CTX.closePath();
+  CTX.fill();
+  CTX.beginPath();
   CTX.moveTo(x - w - 1 + w * 1.37, y - w - 1.33 * w + w * 1.07);
-  CTX.lineTo(x - w - 1 + w * 1.27, y - w - 1.33 * w + w * 1);
   CTX.lineTo(x - w - 1 + w * 1.27, y - w - 1.33 * w + w * 1);
   CTX.bezierCurveTo(
     x - w - 1 + w * 1.2,
@@ -289,6 +293,9 @@ export const GET_PRIZE = (x, y, w, color) => {
     y - w - 1.33 * w + w * 1.37
   );
   CTX.lineTo(x - w - 1 + w * 1.37, y - w - 1.33 * w + w * 1.07);
+  CTX.closePath();
+  CTX.fill();
+  CTX.beginPath();
   CTX.moveTo(x - w - 1 + w * 1.67, y - w - 1.33 * w + w * 0.67);
   CTX.lineTo(x - w - 1 + w * 1.3, y - w - 1.33 * w + w * 0.77);
   CTX.bezierCurveTo(
@@ -336,6 +343,9 @@ export const GET_PRIZE = (x, y, w, color) => {
     x - w - 1 + w * 1.67,
     y - w - 1.33 * w + w * 0.67
   );
+  CTX.closePath();
+  CTX.fill();
+  CTX.beginPath();
   CTX.moveTo(x - w - 1 + w * 0.67, y - w - 1.33 * w + w * 1.07);
   CTX.lineTo(x - w - 1 + w * 0.37, y - w - 1.33 * w + w * 1.37);
   CTX.bezierCurveTo(
@@ -377,6 +387,8 @@ export const GET_PRIZE = (x, y, w, color) => {
   CTX.lineTo(x - w - 1 + w * 0.7, y - w - 1.33 * w + w * 1.03);
   CTX.lineTo(x - w - 1 + w * 0.67, y - w - 1.33 * w + w * 1.07);
   CTX.closePath();
-  CTX.stroke();
   CTX.fill();
+  CTX.fillStyle = "blue";
+  CTX.font = `bold ${w * 1.3}px monospace`;
+  CTX.fillText(name[0].toUpperCase(), x - w / 2.5, y + 0.2 * w);
 };

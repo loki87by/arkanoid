@@ -21,6 +21,9 @@ import {
   GET_PRIZE,
 } from "./consts.js";
 
+CANVAS.setAttribute("height", HEIGHT);
+CANVAS.setAttribute("width", HEIGHT / 1.25);
+
 const requestAnimationFrame =
   window.requestAnimationFrame ||
   window.mozRequestAnimationFrame ||
@@ -77,10 +80,8 @@ let timeCoefficient,
   grab,
   doubleScore,
   bomb,
-  prizeColor;
-
-CANVAS.setAttribute("height", HEIGHT);
-CANVAS.setAttribute("width", HEIGHT / 1.25);
+  prizeColor,
+  prizeName;
 
 if (HEIGHT < WIDTH) {
   DATA.setAttribute(
@@ -235,21 +236,21 @@ function toStartPosition() {
 
 function chekPrize(text) {
   console.log(text);
-  if (text === "longPaddle") {
+  if (text === "wide") {
     const width = paddle.width;
 
     if (width + brickWidth < brickWidth * 14) {
       paddle.width = width + brickWidth;
     }
-  } else if (text === "berserk") {
+  } else if (text === "rise") {
     berserk = true;
   } else if (text === "slowDown") {
     timeCoefficient += 15000;
-  } else if (text === "backup") {
+  } else if (text === "up") {
     bricks.forEach((brick) => {
       brick.y -= brick.height + brickGap;
     });
-  } else if (text === "addLife") {
+  } else if (text === "life") {
     if (lifes < 5) {
       addLife();
     }
@@ -271,7 +272,7 @@ function chekPrize(text) {
       ball.height = ballSize;
       ball.diameter = ballSize;
     } else {
-      return chekPrize(BONUSES[Math.floor(Math.random() * BONUSES.length)]);
+      return chekPrize(prizeName);
     }
   } else if (text === "doubleScore") {
     if (!doubleScore) {
@@ -280,7 +281,7 @@ function chekPrize(text) {
         doubleScore = false;
       }, timeCoefficient / 2);
     } else {
-      return chekPrize(BONUSES[Math.floor(Math.random() * BONUSES.length)]);
+      return chekPrize(prizeName);
     }
   }
 }
@@ -373,6 +374,8 @@ function loop() {
   if (prize.y > CANVAS.height) {
     prize.x = null;
     prize.y = null;
+    prizeName = null;
+    prizeColor = "";
   }
 
   if (COLLIDES(ball, paddle)) {
@@ -401,10 +404,14 @@ function loop() {
     const brick = bricks[i];
 
     if (COLLIDES(ball, brick)) {
-      if (Math.floor(Math.random() * 10) === Math.ceil(Math.random() * 9)) {
+      /* if (
+        Math.floor(Math.random() * 10) === Math.ceil(Math.random() * 9) &&
+        !autopilot
+      ) { */
         prizeColor = brick.color;
+        prizeName = BONUSES[Math.floor(Math.random() * BONUSES.length)];setPrize(brick);
         setPrize(brick);
-      }
+      //}
 
       if (bomb) {
         bomb = false;
@@ -452,16 +459,15 @@ function loop() {
     prize.x = null;
     prize.y = null;
     prizeColor = "";
-    chekPrize(BONUSES[Math.floor(Math.random() * BONUSES.length)]);
+    chekPrize(prizeName);
+    prizeName = null;
+
   }
 
   CTX.fillStyle = "lightgrey";
   CTX.fillRect(0, 0, CANVAS.width, wallSize);
   CTX.fillRect(0, 0, wallSize, CANVAS.height);
   CTX.fillRect(CANVAS.width - wallSize, 0, wallSize, CANVAS.height);
-  CTX.beginPath();
-  CTX.arc(ball.x, ball.y, ball.diameter, 0, 2 * Math.PI);
-  CTX.fill();
 
   bricks.forEach(function (brick) {
     CTX.fillStyle = brick.color;
@@ -471,9 +477,14 @@ function loop() {
   CTX.fillStyle = "cyan";
   CTX.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
 
-  if (prize.y && prize.y % 2 === 0) {
-    GET_PRIZE(prize.x, prize.y, prize.width / 2, prizeColor);
+  if (prize.y) {
+    GET_PRIZE(prize.x, prize.y, prize.width / 2, prizeColor, prizeName);
   }
+  CTX.fillStyle = "lightgrey";
+  CTX.beginPath();
+  CTX.arc(ball.x, ball.y, ball.diameter, 0, 2 * Math.PI);
+  CTX.fill();
+  CTX.closePath();
 }
 
 document.addEventListener("keydown", keydownHandler);
