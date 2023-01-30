@@ -121,271 +121,271 @@ export const GET_PRIZE = (x, y, w, color, name) => {
   CTX.fill();
   CTX.fillStyle = "darkmagenta";
   CTX.beginPath();
-  CTX.moveTo(x - w - 1 + w * 1.3, y - w - 1.33 * w + w * 0.9);
+  CTX.moveTo(x - 1 + w * 0.3, y - 1.43 * w);
   CTX.bezierCurveTo(
-    x - w - 1 + w * 1.3,
-    y - w - 1.33 * w + w * 0.93,
-    x - w - 1 + w * 1.27,
-    y - w - 1.33 * w + w * 0.97,
-    x - w - 1 + w * 1.27,
-    y - w - 1.33 * w + w * 1
+    x - 1 + w * 0.3,
+    y - 1.4 * w,
+    x - 1 + w * 0.27,
+    y - 1.4 * w,
+    x - 1 + w * 0.27,
+    y - 1.33 * w
   );
   CTX.bezierCurveTo(
-    x - w - 1 + w * 1.2,
-    y - w - 1.33 * w + w * 1.07,
-    x - w - 1 + w * 1.17,
-    y - w - 1.33 * w + w * 1.1,
-    x - w - 1 + w * 1.1,
-    y - w - 1.33 * w + w * 1.1
+    x - 1 + w * 0.2,
+    y - 1.27 * w,
+    x - 1 + w * 0.17,
+    y - 1.43 * w,
+    x - 1 + w * 0.1,
+    y - 1.43 * w
   );
   CTX.bezierCurveTo(
-    x - w - 1 + w * 1.07,
-    y - w - 1.33 * w + w * 1.1,
-    x - w - 1 + w * 1.03,
-    y - w - 1.33 * w + w * 1.1,
-    x - w - 1 + w * 1.03,
-    y - w - 1.33 * w + w * 1.1
+    x - 1 + w * 0.07,
+    y - 1.43 * w,
+    x - 1 + w * 0.03,
+    y - 1.43 * w,
+    x - 1 + w * 0.03,
+    y - 1.43 * w
   );
   CTX.bezierCurveTo(
-    x - w - 1 + w * 1,
-    y - w - 1.33 * w + w * 1.1,
-    x - w - 1 + w * 1,
-    y - w - 1.33 * w + w * 1.1,
-    x - w - 1 + w * 0.97,
-    y - w - 1.33 * w + w * 1.1
+    x - 1,
+    y - 1.43 * w,
+    x - 1,
+    y - 1.43 * w,
+    x - 1 - w * 0.03,
+    y - 1.43 * w
   );
   CTX.bezierCurveTo(
-    x - w - 1 + w * 0.9,
-    y - w - 1.33 * w + w * 1.1,
-    x - w - 1 + w * 0.83,
-    y - w - 1.33 * w + w * 1.07,
-    x - w - 1 + w * 0.8,
-    y - w - 1.33 * w + w * 1
+    x - 1 - w * 0.1,
+    y - 1.43 * w,
+    x - 1 - w * 0.17,
+    y - 1.27 * w,
+    x - 1 - w * 0.2,
+    y - 1.33 * w
   );
   CTX.bezierCurveTo(
-    x - w - 1 + w * 0.77,
-    y - w - 1.33 * w + w * 0.97,
-    x - w - 1 + w * 0.73,
-    y - w - 1.33 * w + w * 0.93,
-    x - w - 1 + w * 0.73,
-    y - w - 1.33 * w + w * 0.9
+    x - 1 - 0.23 * w,
+    y - 1.36 * w,
+    x - 1 - 0.27 * w,
+    y - 1.4 * w,
+    x - 1 - 0.27 * w,
+    y - 1.43 * w
   );
   CTX.bezierCurveTo(
-    x - w - 1 + w * 0.73,
-    y - w - 1.33 * w + w * 0.87,
-    x - w - 1 + w * 0.77,
-    y - w - 1.33 * w + w * 0.8,
-    x - w - 1 + w * 0.8,
-    y - w - 1.33 * w + w * 0.77
+    x - 1 - 0.27 * w,
+    y - 1.46 * w,
+    x - 1 - 0.23 * w,
+    y - 1.53 * w,
+    x - 1 - 0.2 * w,
+    y - 1.56 * w
   );
   CTX.bezierCurveTo(
-    x - w - 1 + w * 0.83,
-    y - w - 1.33 * w + w * 0.7,
-    x - w - 1 + w * 0.93,
-    y - w - 1.33 * w + w * 0.67,
-    x - w - 1 + w * 1.03,
-    y - w - 1.33 * w + w * 0.67
+    x - 1 - 0.17 * w,
+    y - 1.63 * w,
+    x - 1 - 0.07 * w,
+    y - 1.66 * w,
+    x - 1 + 0.03 * w,
+    y - 1.66 * w
   );
   CTX.bezierCurveTo(
-    x - w - 1 + w * 1.13,
-    y - w - 1.33 * w + w * 0.67,
-    x - w - 1 + w * 1.2,
-    y - w - 1.33 * w + w * 0.7,
-    x - w - 1 + w * 1.27,
-    y - w - 1.33 * w + w * 0.77
+    x - 1 + 0.13 * w,
+    y - 1.66 * w,
+    x - 1 + 0.2 * w,
+    y - 1.63 * w,
+    x - 1 + 0.27 * w,
+    y - 1.56 * w
   );
   CTX.bezierCurveTo(
-    x - w - 1 + w * 1.3,
-    y - w - 1.33 * w + w * 0.8,
-    x - w - 1 + w * 1.3,
-    y - w - 1.33 * w + w * 0.87,
-    x - w - 1 + w * 1.3,
-    y - w - 1.33 * w + w * 0.9
-  );
-  CTX.closePath();
-  CTX.fill();
-  CTX.beginPath();
-  CTX.moveTo(x - w - 1 + w * 0.73, y - w - 1.33 * w + w * 0.77);
-  CTX.lineTo(x - w - 1 + w * 0.27, y - w - 1.33 * w + w * 0.63);
-  CTX.bezierCurveTo(
-    x - w - 1 + w * 0.27,
-    y - w - 1.33 * w + w * 0.63,
-    x - w - 1 + w * 0.17,
-    y - w - 1.33 * w + w * 0.73,
-    x - w - 1 + w * 0.17,
-    y - w - 1.33 * w + w * 0.83
-  );
-  CTX.lineTo(x - w - 1 + w * 0.17, y - w - 1.33 * w + w * 1);
-  CTX.bezierCurveTo(
-    x - w - 1 + w * 0.17,
-    y - w - 1.33 * w + w * 1.1,
-    x - w - 1 + w * 0.27,
-    y - w - 1.33 * w + w * 1.17,
-    x - w - 1 + w * 0.33,
-    y - w - 1.33 * w + w * 1.13
-  );
-  CTX.lineTo(x - w - 1 + w * 0.7, y - w - 1.33 * w + w * 1.03);
-  CTX.lineTo(x - w - 1 + w * 0.77, y - w - 1.33 * w + w * 1);
-  CTX.lineTo(x - w - 1 + w * 0.8, y - w - 1.33 * w + w * 1);
-  CTX.bezierCurveTo(
-    x - w - 1 + w * 0.77,
-    y - w - 1.33 * w + w * 0.97,
-    x - w - 1 + w * 0.73,
-    y - w - 1.33 * w + w * 0.93,
-    x - w - 1 + w * 0.73,
-    y - w - 1.33 * w + w * 0.9
-  );
-  CTX.bezierCurveTo(
-    x - w - 1 + w * 0.73,
-    y - w - 1.33 * w + w * 0.87,
-    x - w - 1 + w * 0.77,
-    y - w - 1.33 * w + w * 0.8,
-    x - w - 1 + w * 0.8,
-    y - w - 1.33 * w + w * 0.77
-  );
-  CTX.lineTo(x - w - 1 + w * 0.73, y - w - 1.33 * w + w * 0.77); ///
-  CTX.closePath();
-  CTX.fill();
-  CTX.beginPath();
-  CTX.moveTo(x - w - 1 + w * 1.37, y - w - 1.33 * w + w * 1.07);
-  CTX.lineTo(x - w - 1 + w * 1.27, y - w - 1.33 * w + w * 1);
-  CTX.bezierCurveTo(
-    x - w - 1 + w * 1.2,
-    y - w - 1.33 * w + w * 1.07,
-    x - w - 1 + w * 1.17,
-    y - w - 1.33 * w + w * 1.1,
-    x - w - 1 + w * 1.1,
-    y - w - 1.33 * w + w * 1.1
-  );
-  CTX.lineTo(x - w - 1 + w * 1.1, y - w - 1.33 * w + w * 1.1);
-  CTX.bezierCurveTo(
-    x - w - 1 + w * 1.1,
-    y - w - 1.33 * w + w * 1.13,
-    x - w - 1 + w * 1.1,
-    y - w - 1.33 * w + w * 1.13,
-    x - w - 1 + w * 1.1,
-    y - w - 1.33 * w + w * 1.13
-  );
-  CTX.lineTo(x - w - 1 + w * 1.5, y - w - 1.33 * w + w * 1.53);
-  CTX.bezierCurveTo(
-    x - w - 1 + w * 1.53,
-    y - w - 1.33 * w + w * 1.57,
-    x - w - 1 + w * 1.6,
-    y - w - 1.33 * w + w * 1.53,
-    x - w - 1 + w * 1.6,
-    y - w - 1.33 * w + w * 1.5
-  );
-  CTX.bezierCurveTo(
-    x - w - 1 + w * 1.6,
-    y - w - 1.33 * w + w * 1.5,
-    x - w - 1 + w * 1.6,
-    y - w - 1.33 * w + w * 1.47,
-    x - w - 1 + w * 1.63,
-    y - w - 1.33 * w + w * 1.47
-  );
-  CTX.lineTo(x - w - 1 + w * 1.63, y - w - 1.33 * w + w * 1.47);
-  CTX.bezierCurveTo(
-    x - w - 1 + w * 1.7,
-    y - w - 1.33 * w + w * 1.47,
-    x - w - 1 + w * 1.73,
-    y - w - 1.33 * w + w * 1.4,
-    x - w - 1 + w * 1.67,
-    y - w - 1.33 * w + w * 1.37
-  );
-  CTX.lineTo(x - w - 1 + w * 1.37, y - w - 1.33 * w + w * 1.07);
-  CTX.closePath();
-  CTX.fill();
-  CTX.beginPath();
-  CTX.moveTo(x - w - 1 + w * 1.67, y - w - 1.33 * w + w * 0.67);
-  CTX.lineTo(x - w - 1 + w * 1.3, y - w - 1.33 * w + w * 0.77);
-  CTX.bezierCurveTo(
-    x - w - 1 + w * 1.3,
-    y - w - 1.33 * w + w * 0.77,
-    x - w - 1 + w * 1.3,
-    y - w - 1.33 * w + w * 0.77,
-    x - w - 1 + w * 1.27,
-    y - w - 1.33 * w + w * 0.77
-  );
-  CTX.lineTo(x - w - 1 + w * 1.27, y - w - 1.33 * w + w * 0.77);
-  CTX.bezierCurveTo(
-    x - w - 1 + w * 1.3,
-    y - w - 1.33 * w + w * 0.8,
-    x - w - 1 + w * 1.3,
-    y - w - 1.33 * w + w * 0.87,
-    x - w - 1 + w * 1.3,
-    y - w - 1.33 * w + w * 0.9
-  );
-  CTX.bezierCurveTo(
-    x - w - 1 + w * 1.3,
-    y - w - 1.33 * w + w * 0.93,
-    x - w - 1 + w * 1.27,
-    y - w - 1.33 * w + w * 0.97,
-    x - w - 1 + w * 1.27,
-    y - w - 1.33 * w + w * 1
-  );
-  CTX.lineTo(x - w - 1 + w * 1.27, y - w - 1.33 * w + w * 1);
-  CTX.lineTo(x - w - 1 + w * 1.37, y - w - 1.33 * w + w * 1.07);
-  CTX.lineTo(x - w - 1 + w * 1.67, y - w - 1.33 * w + w * 1.13);
-  CTX.bezierCurveTo(
-    x - w - 1 + w * 1.77,
-    y - w - 1.33 * w + w * 1.17,
-    x - w - 1 + w * 1.9,
-    y - w - 1.33 * w + w * 1.1,
-    x - w - 1 + w * 1.9,
-    y - w - 1.33 * w + w * 1
-  );
-  CTX.lineTo(x - w - 1 + w * 1.9, y - w - 1.33 * w + w * 0.83);
-  CTX.bezierCurveTo(
-    x - w - 1 + w * 1.9,
-    y - w - 1.33 * w + w * 0.73,
-    x - w - 1 + w * 1.8,
-    y - w - 1.33 * w + w * 0.63,
-    x - w - 1 + w * 1.67,
-    y - w - 1.33 * w + w * 0.67
+    x - 1 + 0.3 * w,
+    y - 1.53 * w,
+    x - 1 + 0.3 * w,
+    y - 1.46 * w,
+    x - 1 + 0.3 * w,
+    y - 1.43 * w
   );
   CTX.closePath();
   CTX.fill();
   CTX.beginPath();
-  CTX.moveTo(x - w - 1 + w * 0.67, y - w - 1.33 * w + w * 1.07);
-  CTX.lineTo(x - w - 1 + w * 0.37, y - w - 1.33 * w + w * 1.37);
+  CTX.moveTo(x - 1 - 0.27 * w, y - 1.56 * w);
+  CTX.lineTo(x - 1 - 0.73 * w, y - 1.7 * w);
   CTX.bezierCurveTo(
-    x - w - 1 + w * 0.33,
-    y - w - 1.33 * w + w * 1.4,
-    x - w - 1 + w * 0.37,
-    y - w - 1.33 * w + w * 1.47,
-    x - w - 1 + w * 0.4,
-    y - w - 1.33 * w + w * 1.47
+    x - 1 - 0.73 * w,
+    y - 1.7 * w,
+    x - 1 - 0.83 * w,
+    y - 1.6 * w,
+    x - 1 - 0.83 * w,
+    y - 1.5 * w
   );
-  CTX.lineTo(x - w - 1 + w * 0.43, y - w - 1.33 * w + w * 1.47);
+  CTX.lineTo(x - 1 - 0.83 * w, y - 1.33 * w);
   CTX.bezierCurveTo(
-    x - w - 1 + w * 0.47,
-    y - w - 1.33 * w + w * 1.47,
-    x - w - 1 + w * 0.47,
-    y - w - 1.33 * w + w * 1.5,
-    x - w - 1 + w * 0.47,
-    y - w - 1.33 * w + w * 1.5
+    x - 1 - 0.83 * w,
+    y - 1.23 * w,
+    x - 1 - 0.73 * w,
+    y - 1.16 * w,
+    x - 1 - 0.67 * w,
+    y - 1.2 * w
+  );
+  CTX.lineTo(x - 1 - 0.3 * w, y - 1.3 * w);
+  CTX.lineTo(x - 1 - 0.23 * w, y - 1.33 * w);
+  CTX.lineTo(x - 1 - 0.2 * w, y - 1.33 * w);
+  CTX.bezierCurveTo(
+    x - 1 - 0.23 * w,
+    y - 1.36 * w,
+    x - 1 - 0.27 * w,
+    y - 1.4 * w,
+    x - 1 - 0.27 * w,
+    y - 1.43 * w
   );
   CTX.bezierCurveTo(
-    x - w - 1 + w * 0.47,
-    y - w - 1.33 * w + w * 1.53,
-    x - w - 1 + w * 0.53,
-    y - w - 1.33 * w + w * 1.57,
-    x - w - 1 + w * 0.53,
-    y - w - 1.33 * w + w * 1.53
+    x - 1 - 0.27 * w,
+    y - 1.46 * w,
+    x - 1 - 0.23 * w,
+    y - 1.53 * w,
+    x - 1 - 0.2 * w,
+    y - 1.56 * w
   );
-  CTX.lineTo(x - w - 1 + w * 0.97, y - w - 1.33 * w + w * 1.13);
-  CTX.lineTo(x - w - 1 + w * 0.97, y - w - 1.33 * w + w * 1.1);
+  CTX.lineTo(x - 1 - 0.27 * w, y - 1.56 * w);
+  CTX.closePath();
+  CTX.fill();
+  CTX.beginPath();
+  CTX.moveTo(x - 1 + 0.37 * w, y - 1.26 * w);
+  CTX.lineTo(x - 1 + 0.27 * w, y - 1.33 * w);
   CTX.bezierCurveTo(
-    x - w - 1 + w * 0.9,
-    y - w - 1.33 * w + w * 1.1,
-    x - w - 1 + w * 0.83,
-    y - w - 1.33 * w + w * 1.07,
-    x - w - 1 + w * 0.8,
-    y - w - 1.33 * w + w * 1
+    x - 1 + 0.2 * w,
+    y - 1.26 * w,
+    x - 1 + 0.17 * w,
+    y - 1.23 * w,
+    x - 1 + 0.1 * w,
+    y - 1.23 * w
   );
-  CTX.lineTo(x - w - 1 + w * 0.77, y - w - 1.33 * w + w * 1);
-  CTX.lineTo(x - w - 1 + w * 0.7, y - w - 1.33 * w + w * 1.03);
-  CTX.lineTo(x - w - 1 + w * 0.67, y - w - 1.33 * w + w * 1.07);
+  CTX.lineTo(x - 1 + 0.1 * w, y - 1.23 * w);
+  CTX.bezierCurveTo(
+    x - 1 + 0.1 * w,
+    y - 1.2 * w,
+    x - 1 + 0.1 * w,
+    y - 1.2 * w,
+    x - 1 + 0.1 * w,
+    y - 1.2 * w
+  );
+  CTX.lineTo(x - 1 + 0.5 * w, y - 0.8 * w);
+  CTX.bezierCurveTo(
+    x - 1 + 0.53 * w,
+    y - 0.76 * w,
+    x - 1 + 0.6 * w,
+    y - 0.8 * w,
+    x - 1 + 0.6 * w,
+    y - 0.83 * w
+  );
+  CTX.bezierCurveTo(
+    x - 1 + 0.6 * w,
+    y - 0.83 * w,
+    x - 1 + 0.6 * w,
+    y - 0.86 * w,
+    x - 1 + 0.63 * w,
+    y - 0.86 * w
+  );
+  CTX.lineTo(x - 1 + 0.63 * w, y - 0.86 * w);
+  CTX.bezierCurveTo(
+    x - 1 + 0.7 * w,
+    y - 0.86 * w,
+    x - 1 + 0.73 * w,
+    y - 0.93 * w,
+    x - 1 + 0.67 * w,
+    y - 0.96 * w
+  );
+  CTX.lineTo(x - 1 + 0.37 * w, y - 1.26 * w);
+  CTX.closePath();
+  CTX.fill();
+  CTX.beginPath();
+  CTX.moveTo(x - 1 + 0.67 * w, y - 1.66 * w);
+  CTX.lineTo(x - 1 + 0.3 * w, y - 1.56 * w);
+  CTX.bezierCurveTo(
+    x - 1 + 0.3 * w,
+    y - 1.56 * w,
+    x - 1 + 0.3 * w,
+    y - 1.56 * w,
+    x - 1 + 0.27 * w,
+    y - 1.56 * w
+  );
+  CTX.lineTo(x - 1 + 0.27 * w, y - 1.56 * w);
+  CTX.bezierCurveTo(
+    x - 1 + 0.3 * w,
+    y - 1.53 * w,
+    x - 1 + 0.3 * w,
+    y - 1.46 * w,
+    x - 1 + 0.3 * w,
+    y - 1.43 * w
+  );
+  CTX.bezierCurveTo(
+    x - 1 + 0.3 * w,
+    y - 1.4 * w,
+    x - 1 + 0.27 * w,
+    y - 1.36 * w,
+    x - 1 + 0.27 * w,
+    y - 1.33 * w
+  );
+  CTX.lineTo(x - 1 + 0.27 * w, y - 1.33 * w);
+  CTX.lineTo(x - 1 + 0.37 * w, y - 1.26 * w);
+  CTX.lineTo(x - 1 + 0.67 * w, y - 1.2 * w);
+  CTX.bezierCurveTo(
+    x - 1 + 0.77 * w,
+    y - 1.16 * w,
+    x - 1 + 0.9 * w,
+    y - 1.23 * w,
+    x - 1 + 0.9 * w,
+    y - 1.33 * w
+  );
+  CTX.lineTo(x - 1 + 0.9 * w, y - 1.5 * w);
+  CTX.bezierCurveTo(
+    x - 1 + 0.9 * w,
+    y - 1.6 * w,
+    x - 1 + 0.8 * w,
+    y - 1.7 * w,
+    x - 1 + 0.67 * w,
+    y - 1.66 * w
+  );
+  CTX.closePath();
+  CTX.fill();
+  CTX.beginPath();
+  CTX.moveTo(x - 1 - 0.33 * w, y - 1.26 * w);
+  CTX.lineTo(x - 1 - 0.63 * w, y - 0.96 * w);
+  CTX.bezierCurveTo(
+    x - 1 - 0.67 * w,
+    y - 0.93 * w,
+    x - 1 - 0.63 * w,
+    y - 0.86 * w,
+    x - 1 - 0.6 * w,
+    y - 0.86 * w
+  );
+  CTX.lineTo(x - 1 - 0.57 * w, y - 0.86 * w);
+  CTX.bezierCurveTo(
+    x - 1 - 0.53 * w,
+    y - 0.86 * w,
+    x - 1 - 0.53 * w,
+    y - 0.83 * w,
+    x - 1 - 0.53 * w,
+    y - 0.83 * w
+  );
+  CTX.bezierCurveTo(
+    x - 1 - 0.53 * w,
+    y - 0.8 * w,
+    x - 1 - 0.47 * w,
+    y - 0.76 * w,
+    x - 1 - 0.47 * w,
+    y - 0.8 * w
+  );
+  CTX.lineTo(x - 1 - 0.03 * w, y - 1.2 * w);
+  CTX.lineTo(x - 1 - 0.03 * w, y - 1.23 * w);
+  CTX.bezierCurveTo(
+    x - 1 - 0.1 * w,
+    y - 1.23 * w,
+    x - 1 - 0.17 * w,
+    y - 1.26 * w,
+    x - 1 - 0.2 * w,
+    y - 1.33 * w
+  );
+  CTX.lineTo(x - 1 - 0.23 * w, y - 1.33 * w);
+  CTX.lineTo(x - 1 - 0.3 * w, y - 1.3 * w);
+  CTX.lineTo(x - 1 - 0.33 * w, y - 1.26 * w);
   CTX.closePath();
   CTX.fill();
   CTX.fillStyle = "blue";
