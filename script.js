@@ -142,6 +142,8 @@ function reset() {
   for (let i = 0; i < bricks.length; i++) {
     bricks.pop();
   }
+  prizeColor = ''
+  prizeName = '';
 
   for (let row = 0; row < LEVEL1.length; row++) {
     for (let col = 0; col < LEVEL1[row].length; col++) {
@@ -178,6 +180,7 @@ function restart() {
 }
 
 function newGame() {
+  CTX.clearRect(0, 0, CANVAS.width, CANVAS.height);
   level++;
   reset();
   addLife();
@@ -262,7 +265,7 @@ function chekPrize(text) {
 
 function setPrize(startCoords) {
   if (prize.x === null && prize.y === null) {
-    prize.x = startCoords.x;
+    prize.x = startCoords.x + brickWidth / 2;
     prize.y = startCoords.y;
     prize.color = startCoords.color;
   }
@@ -329,7 +332,7 @@ function loop() {
   if (prize.y > CANVAS.height) {
     prize.x = null;
     prize.y = null;
-    prizeName = null;
+    prizeName = '';
     prizeColor = "";
   }
 
@@ -359,14 +362,15 @@ function loop() {
     const brick = bricks[i];
 
     if (COLLIDES(ball, brick)) {
-      /* if (
+      if (
         Math.floor(Math.random() * 10) === Math.ceil(Math.random() * 9) &&
-        !autopilot
-      ) { */
+        !autopilot && prizeName !== ''
+      ) {
         prizeColor = brick.color;
-        prizeName = BONUSES[Math.floor(Math.random() * BONUSES.length)];setPrize(brick);
+        prizeName = BONUSES[Math.floor(Math.random() * BONUSES.length)];
         setPrize(brick);
-      //}
+        setPrize(brick);
+      }
 
       if (bomb) {
         bomb = false;
@@ -411,8 +415,7 @@ function loop() {
     prize.y = null;
     prizeColor = "";
     chekPrize(prizeName);
-    prizeName = null;
-
+    prizeName = '';
   }
 
   CTX.fillStyle = "lightgrey";
