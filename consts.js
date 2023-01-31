@@ -14,28 +14,97 @@ export const BUTTON = document.querySelector("button");
 
 export const BASIC_TIME = 65000;
 
-export const LEVEL1 = [
-  [],
-  [],
-  [],
-  [],
-  [],
-  [],
-  ["R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R"],
-  ["R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R"],
-  ["O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O"],
-  ["O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O"],
-  ["G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G"],
-  ["G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G"],
-  ["Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y"],
-  ["Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y"],
+export const LEVELS = [
+  [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    ["R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R"],
+    ["R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R"],
+    ["O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O"],
+    ["O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O"],
+    ["Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y"],
+    ["Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y"],
+    ["G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G"],
+    ["G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G"],
+  ],
+  [
+    [],
+    [],
+    [],
+    ["R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R"],
+    ["R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R"],
+    ["R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R"],
+    [],
+    ["O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O"],
+    ["O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O"],
+    [],
+    ["Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y"],
+    [],
+    ["G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G"],
+    ["G", "B", "G", "B", "G", "B", "G", "B", "G", "B", "G", "B", "G", "B"],
+  ],
+  [
+    ["", "R", "", "R", "", "R", "", "R", "", "R", "", "R", "", "R"],
+    ["O", "", "O", "", "O", "", "O", "", "O", "", "O", "", "O", ""],
+    ["", "Y", "", "Y", "", "Y", "", "Y", "", "Y", "", "Y", "", "Y"],
+    ["G", "", "G", "", "G", "", "G", "", "G", "", "G", "", "G", ""],
+    ["", "C", "", "C", "", "C", "", "C", "", "C", "", "C", "", "C"],
+    ["B", "", "B", "", "B", "", "B", "", "B", "", "B", "", "B", ""],
+    ["", "P", "", "P", "", "P", "", "P", "", "P", "", "P", "", "P"],
+    ["V", "", "V", "", "V", "", "V", "", "V", "", "V", "", "V", ""],
+    ["", "P", "", "P", "", "P", "", "P", "", "P", "", "P", "", "P"],
+    ["B", "", "B", "", "B", "", "B", "", "B", "", "B", "", "B", ""],
+    ["", "C", "", "C", "", "C", "", "C", "", "C", "", "C", "", "C"],
+    ["G", "", "G", "", "G", "", "G", "", "G", "", "G", "", "G", ""],
+    ["", "Y", "", "Y", "", "Y", "", "Y", "", "Y", "", "Y", "", "Y"],
+    ["O", "", "O", "", "O", "", "O", "", "O", "", "O", "", "O", ""],
+    ["", "R", "", "R", "", "R", "", "R", "", "R", "", "R", "", "R"],
+  ],
 ];
 
 export const COLORS = {
   R: "red",
   O: "orange",
-  G: "green",
   Y: "yellow",
+  G: "green",
+  C: "cyan",
+  B: "blue",
+  P: "pink",
+  V: "violet",
+};
+
+export const NEW_RANDOM_LEWEL = (num) => {
+  const colors = Object.keys(COLORS);
+  colors.push("");
+  const lastLen = LEVELS[LEVELS.length - 1].length;
+  let limit = lastLen;
+  const res = []
+
+  if ((lastLen + num / 2) % num === 0) {
+    limit++;
+  }
+
+  for (let r = 0; r < limit; r++) {
+    const half = [];
+    for (let i = 0; i < 7; i++) {
+      half.push(colors[Math.floor(Math.random() * colors.length)]);
+    }
+    const mirror = half.slice().reverse();
+    let row
+
+    if((num * num - r) % 2 === 0) {
+      row = [...mirror, ...half]
+    } else {
+      row = [...half, ...mirror]
+    }
+    res.push(row)
+  }
+  console.log(res)
+  LEVELS.push(res)
 };
 
 export const BONUSES = [

@@ -10,7 +10,7 @@ import {
   POPUP,
   BUTTON,
   BASIC_TIME,
-  LEVEL1,
+  LEVELS,
   COLORS,
   GET_SIZE,
   COLLIDES,
@@ -18,6 +18,7 @@ import {
   SHOW_POPUP,
   DETONATE,
   GET_PRIZE,
+  NEW_RANDOM_LEWEL
 } from "./consts.js";
 
 CANVAS.setAttribute("height", HEIGHT);
@@ -63,6 +64,7 @@ const bricks = [];
 let level = 1;
 let lifes = 5;
 let score = 0;
+let prizeName = '';
 let timeCoefficient,
   gameOver,
   win,
@@ -73,8 +75,7 @@ let timeCoefficient,
   grab,
   doubleScore,
   bomb,
-  prizeColor,
-  prizeName;
+  prizeColor;
 
 if (HEIGHT < WIDTH) {
   DATA.setAttribute(
@@ -139,15 +140,17 @@ function reset() {
   isDropped = false;
   timestamp = Date.now();
   ball.speed = level / 5 + 1.8;
-  for (let i = 0; i < bricks.length; i++) {
+  const bricksLength = bricks.length
+  for (let i = 0; i < bricksLength; i++) {
     bricks.pop();
   }
   prizeColor = ''
   prizeName = '';
 
-  for (let row = 0; row < LEVEL1.length; row++) {
-    for (let col = 0; col < LEVEL1[row].length; col++) {
-      const colorCode = LEVEL1[row][col];
+  for (let row = 0; row < LEVELS[level - 1].length; row++) {
+    for (let col = 0; col < LEVELS[level - 1][row].length; col++) {
+      const colorCode = LEVELS[level - 1][row][col];
+      if(colorCode !== '') {
       bricks.push({
         x: wallSize + (brickWidth + brickGap) * col,
         y: wallSize + (brickHeight + brickGap) * row,
@@ -155,6 +158,7 @@ function reset() {
         width: brickWidth,
         height: brickHeight,
       });
+    }
     }
   }
 }
@@ -182,6 +186,10 @@ function restart() {
 function newGame() {
   CTX.clearRect(0, 0, CANVAS.width, CANVAS.height);
   level++;
+
+  if(level >= 3) {
+    NEW_RANDOM_LEWEL(level + 1)
+  }
   reset();
   addLife();
   BUTTON.removeEventListener("click", newGame);
@@ -212,7 +220,6 @@ function toStartPosition() {
 }
 
 function chekPrize(text) {
-  console.log(text);
   if (text === "wide") {
     const width = paddle.width;
 
@@ -364,7 +371,7 @@ function loop() {
     if (COLLIDES(ball, brick)) {
       if (
         Math.floor(Math.random() * 10) === Math.ceil(Math.random() * 9) &&
-        !autopilot && prizeName !== ''
+        !autopilot && prizeName === ''
       ) {
         prizeColor = brick.color;
         prizeName = BONUSES[Math.floor(Math.random() * BONUSES.length)];
@@ -386,11 +393,19 @@ function loop() {
       }
 
       score++;
-      SCORE.textContent = `Счёт: ${score}`;
 
       if (score % 100 === 0) {
         addLife();
       }
+
+      if (doubleScore) {
+        score++;
+
+        if (score % 100 === 0) {
+          addLife();
+        }
+      }
+      SCORE.textContent = `Счёт: ${score}`;
 
       if (bricks.length === 0) {
         win = true;
@@ -418,15 +433,15 @@ function loop() {
     prizeName = '';
   }
 
-  CTX.fillStyle = "lightgrey";
-  CTX.fillRect(0, 0, CANVAS.width, wallSize);
-  CTX.fillRect(0, 0, wallSize, CANVAS.height);
-  CTX.fillRect(CANVAS.width - wallSize, 0, wallSize, CANVAS.height);
-
   bricks.forEach(function (brick) {
     CTX.fillStyle = brick.color;
     CTX.fillRect(brick.x, brick.y, brick.width, brick.height);
   });
+
+  CTX.fillStyle = "lightgrey";
+  CTX.fillRect(0, 0, CANVAS.width, wallSize);
+  CTX.fillRect(0, 0, wallSize, CANVAS.height);
+  CTX.fillRect(CANVAS.width - wallSize, 0, wallSize, CANVAS.height);
 
   CTX.fillStyle = "cyan";
   CTX.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
