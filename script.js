@@ -12,13 +12,16 @@ import {
   BASIC_TIME,
   LEVELS,
   COLORS,
+  SUPER_COLORS,
+  BONUSES,
   GET_SIZE,
   COLLIDES,
   SET_LIVES,
   SHOW_POPUP,
+  METAMORPHOSIS,
   DETONATE,
   GET_PRIZE,
-  NEW_RANDOM_LEWEL
+  NEW_RANDOM_LEWEL,
 } from "./consts.js";
 
 CANVAS.setAttribute("height", HEIGHT);
@@ -61,10 +64,10 @@ const ball = {
 
 const bricks = [];
 
-let level = 1;
+let level = 3;
 let lifes = 5;
 let score = 0;
-let prizeName = '';
+let prizeName = "";
 let timeCoefficient,
   gameOver,
   win,
@@ -140,25 +143,27 @@ function reset() {
   isDropped = false;
   timestamp = Date.now();
   ball.speed = level / 5 + 1.8;
-  const bricksLength = bricks.length
+  const bricksLength = bricks.length;
   for (let i = 0; i < bricksLength; i++) {
     bricks.pop();
   }
-  prizeColor = ''
-  prizeName = '';
+  prizeColor = "";
+  prizeName = "";
 
   for (let row = 0; row < LEVELS[level - 1].length; row++) {
     for (let col = 0; col < LEVELS[level - 1][row].length; col++) {
       const colorCode = LEVELS[level - 1][row][col];
-      if(colorCode !== '') {
-      bricks.push({
-        x: wallSize + (brickWidth + brickGap) * col,
-        y: wallSize + (brickHeight + brickGap) * row,
-        color: COLORS[colorCode],
-        width: brickWidth,
-        height: brickHeight,
-      });
-    }
+      if (colorCode !== "") {
+        bricks.push({
+          x: wallSize + (brickWidth + brickGap) * col,
+          y: wallSize + (brickHeight + brickGap) * row,
+          color: COLORS[colorCode],
+          width: brickWidth,
+          height: brickHeight,
+          super: colorCode === "S" ? true : false,
+          superColorCounter: 0,
+        });
+      }
     }
   }
 }
@@ -187,8 +192,8 @@ function newGame() {
   CTX.clearRect(0, 0, CANVAS.width, CANVAS.height);
   level++;
 
-  if(level >= 3) {
-    NEW_RANDOM_LEWEL(level + 1)
+  if (level >= 3) {
+    NEW_RANDOM_LEWEL(level + 1);
   }
   reset();
   addLife();
@@ -256,17 +261,14 @@ function chekPrize(text) {
       ball.height = ballSize;
       ball.diameter = ballSize;
     } else {
+      console.log(prizeName)
       return chekPrize(prizeName);
     }
   } else if (text === "doubleScore") {
-    if (!doubleScore) {
       doubleScore = true;
       setTimeout(() => {
         doubleScore = false;
       }, timeCoefficient / 2);
-    } else {
-      return chekPrize(prizeName);
-    }
   }
 }
 
@@ -339,7 +341,7 @@ function loop() {
   if (prize.y > CANVAS.height) {
     prize.x = null;
     prize.y = null;
-    prizeName = '';
+    prizeName = "";
     prizeColor = "";
   }
 
@@ -371,11 +373,13 @@ function loop() {
     if (COLLIDES(ball, brick)) {
       if (
         Math.floor(Math.random() * 10) === Math.ceil(Math.random() * 9) &&
-        !autopilot && prizeName === ''
+        !autopilot &&
+        prizeName === ""
       ) {
         prizeColor = brick.color;
         prizeName = BONUSES[Math.floor(Math.random() * BONUSES.length)];
-        setPrize(brick);
+
+      console.log(prizeName)
         setPrize(brick);
       }
 
@@ -388,6 +392,8 @@ function loop() {
           brickHeight + brickGap,
           brickWidth + brickGap
         );
+      } else if (brick.super && brick.superColorCounter < 8) {
+        METAMORPHOSIS(brick);
       } else {
         bricks.splice(i, 1);
       }
@@ -430,7 +436,7 @@ function loop() {
     prize.y = null;
     prizeColor = "";
     chekPrize(prizeName);
-    prizeName = '';
+    prizeName = "";
   }
 
   bricks.forEach(function (brick) {
