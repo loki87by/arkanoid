@@ -12,7 +12,6 @@ import {
   BASIC_TIME,
   LEVELS,
   COLORS,
-  SUPER_COLORS,
   BONUSES,
   GET_SIZE,
   COLLIDES,
@@ -64,7 +63,7 @@ const ball = {
 
 const bricks = [];
 
-let level = 3;
+let level = 1;
 let lifes = 5;
 let score = 0;
 let prizeName = "";
@@ -261,14 +260,13 @@ function chekPrize(text) {
       ball.height = ballSize;
       ball.diameter = ballSize;
     } else {
-      console.log(prizeName)
       return chekPrize(prizeName);
     }
   } else if (text === "doubleScore") {
-      doubleScore = true;
-      setTimeout(() => {
-        doubleScore = false;
-      }, timeCoefficient / 2);
+    doubleScore = true;
+    setTimeout(() => {
+      doubleScore = false;
+    }, timeCoefficient / 2);
   }
 }
 
@@ -314,6 +312,23 @@ function loop() {
   }
   ball.x += ball.dx;
   ball.y += ball.dy;
+
+  if (prize.y) {
+    prize.y += prize.dy;
+  }
+
+  if (autopilot) {
+    if (ball.x <= wallSize + paddle.width / 2) {
+      paddle.x = wallSize;
+    } else if (
+      ball.x + ball.width >=
+      HEIGHT / 1.25 - wallSize - paddle.width / 2
+    ) {
+      paddle.x = HEIGHT / 1.25 - wallSize - paddle.width
+    } else {
+      paddle.x = ball.x - paddle.width / 2;
+    }
+  }
 
   if (ball.x < wallSize) {
     ball.x = wallSize;
@@ -378,8 +393,6 @@ function loop() {
       ) {
         prizeColor = brick.color;
         prizeName = BONUSES[Math.floor(Math.random() * BONUSES.length)];
-
-      console.log(prizeName)
         setPrize(brick);
       }
 

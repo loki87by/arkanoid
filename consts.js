@@ -32,22 +32,6 @@ export const LEVELS = [
     ["G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G"],
   ],
   [
-    [],
-    [],
-    [],
-    ["R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R"],
-    ["R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R"],
-    ["R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R"],
-    [],
-    ["O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O"],
-    ["O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O"],
-    [],
-    ["Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y"],
-    [],
-    ["G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G", "G"],
-    ["G", "B", "G", "B", "G", "B", "G", "B", "G", "B", "G", "B", "G", "B"],
-  ],
-  [
     ["", "", "", "", "", "", "S", "S", "", "", "", "", "", ""],
     ["", "", "", "", "", "G", "R", "R", "G", "", "", "", "", ""],
     ["", "", "", "", "B", "R", "O", "O", "R", "B", "", "", "", ""],
@@ -62,7 +46,7 @@ export const LEVELS = [
     ["", "", "", "", "", "B", "R", "R", "B", "", "", "", "", ""],
     ["", "", "", "", "", "", "S", "S", "", "", "", "", "", ""],
     [],
-    []
+    [],
   ],
 ];
 
@@ -78,7 +62,7 @@ export const COLORS = {
   M: "magenta",
 };
 
-export const SUPER_COLORS = [
+const SUPER_COLORS = [
   "silver",
   "cyan",
   "green",
@@ -92,7 +76,16 @@ export const SUPER_COLORS = [
 
 export const NEW_RANDOM_LEWEL = (num) => {
   const colors = Object.keys(COLORS);
-  colors.push("");
+  colors.sort()
+  const len = colors.length
+  for(let i=len-2; i>=0; i--) {
+    const shortArray = colors.slice(0, i)
+    shortArray.forEach((item) => {
+    colors.push('')
+    colors.push(item)
+  })
+  }
+  colors.sort()
   const lastLen = LEVELS[LEVELS.length - 1].length;
   let limit = lastLen;
   const res = [];
@@ -207,8 +200,10 @@ export const DETONATE = (array, brick, vertical, horizontal) => {
 
 export const GET_PRIZE = (x, y, w, color, name) => {
   CTX.fillStyle = color;
+  CTX.beginPath();
   CTX.arc(x, y - 0.3 * w, w, 0, 2 * Math.PI);
   CTX.fill();
+  CTX.closePath();
   CTX.fillStyle = "darkmagenta";
   CTX.beginPath();
   CTX.moveTo(x - 1 + w * 0.3, y - 1.43 * w);
