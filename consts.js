@@ -48,41 +48,54 @@ export const LEVELS = [
     ["G", "B", "G", "B", "G", "B", "G", "B", "G", "B", "G", "B", "G", "B"],
   ],
   [
-    ["", "R", "", "R", "", "R", "", "R", "", "R", "", "R", "", "R"],
-    ["O", "", "O", "", "O", "", "O", "", "O", "", "O", "", "O", ""],
-    ["", "Y", "", "Y", "", "Y", "", "Y", "", "Y", "", "Y", "", "Y"],
-    ["G", "", "G", "", "G", "", "G", "", "G", "", "G", "", "G", ""],
-    ["", "C", "", "C", "", "C", "", "C", "", "C", "", "C", "", "C"],
-    ["B", "", "B", "", "B", "", "B", "", "B", "", "B", "", "B", ""],
-    ["", "P", "", "P", "", "P", "", "P", "", "P", "", "P", "", "P"],
-    ["V", "", "V", "", "V", "", "V", "", "V", "", "V", "", "V", ""],
-    ["", "P", "", "P", "", "P", "", "P", "", "P", "", "P", "", "P"],
-    ["B", "", "B", "", "B", "", "B", "", "B", "", "B", "", "B", ""],
-    ["", "C", "", "C", "", "C", "", "C", "", "C", "", "C", "", "C"],
-    ["G", "", "G", "", "G", "", "G", "", "G", "", "G", "", "G", ""],
-    ["", "Y", "", "Y", "", "Y", "", "Y", "", "Y", "", "Y", "", "Y"],
-    ["O", "", "O", "", "O", "", "O", "", "O", "", "O", "", "O", ""],
-    ["", "R", "", "R", "", "R", "", "R", "", "R", "", "R", "", "R"],
+    ["", "", "", "", "", "", "S", "S", "", "", "", "", "", ""],
+    ["", "", "", "", "", "G", "R", "R", "G", "", "", "", "", ""],
+    ["", "", "", "", "B", "R", "O", "O", "R", "B", "", "", "", ""],
+    ["", "", "", "S", "R", "O", "Y", "Y", "O", "R", "S", "", "", ""],
+    ["", "", "B", "R", "O", "Y", "C", "C", "Y", "O", "R", "B", "", ""],
+    ["", "G", "R", "O", "Y", "C", "P", "P", "C", "Y", "O", "R", "G", ""],
+    ["S", "R", "O", "Y", "C", "P", "M", "M", "P", "C", "Y", "O", "R", "S"],
+    ["", "G", "R", "O", "Y", "C", "P", "P", "C", "Y", "O", "R", "G", ""],
+    ["", "", "B", "R", "O", "Y", "C", "C", "Y", "O", "R", "B", "", ""],
+    ["", "", "", "S", "R", "O", "Y", "Y", "O", "R", "S", "", "", ""],
+    ["", "", "", "", "G", "R", "O", "O", "R", "G", "", "", "", ""],
+    ["", "", "", "", "", "B", "R", "R", "B", "", "", "", "", ""],
+    ["", "", "", "", "", "", "S", "S", "", "", "", "", "", ""],
+    [],
+    []
   ],
 ];
 
 export const COLORS = {
-  R: "red",
   O: "orange",
+  C: "cyan",
   Y: "yellow",
   G: "green",
-  C: "cyan",
-  B: "blue",
+  S: "silver",
   P: "pink",
-  V: "violet",
+  B: "blue",
+  R: "red",
+  M: "magenta",
 };
+
+export const SUPER_COLORS = [
+  "silver",
+  "cyan",
+  "green",
+  "blue",
+  "magenta",
+  "pink",
+  "red",
+  "orange",
+  "yellow",
+];
 
 export const NEW_RANDOM_LEWEL = (num) => {
   const colors = Object.keys(COLORS);
   colors.push("");
   const lastLen = LEVELS[LEVELS.length - 1].length;
   let limit = lastLen;
-  const res = []
+  const res = [];
 
   if ((lastLen + num / 2) % num === 0) {
     limit++;
@@ -94,17 +107,16 @@ export const NEW_RANDOM_LEWEL = (num) => {
       half.push(colors[Math.floor(Math.random() * colors.length)]);
     }
     const mirror = half.slice().reverse();
-    let row
+    let row;
 
-    if((num * num - r) % 2 === 0) {
-      row = [...mirror, ...half]
+    if ((num * num - r) % 2 === 0) {
+      row = [...mirror, ...half];
     } else {
-      row = [...half, ...mirror]
+      row = [...half, ...mirror];
     }
-    res.push(row)
+    res.push(row);
   }
-  console.log(res)
-  LEVELS.push(res)
+  LEVELS.push(res);
 };
 
 export const BONUSES = [
@@ -148,6 +160,11 @@ export const SHOW_POPUP = (title, text, func) => {
   BUTTON.addEventListener("click", func);
 };
 
+export const METAMORPHOSIS = (brick) => {
+  brick.superColorCounter = brick.superColorCounter + 1;
+  brick.color = SUPER_COLORS[brick.superColorCounter];
+};
+
 const findAim = (array, coords) => {
   const index = array.findIndex((brick) => {
     if (brick.x === coords.x && brick.y === coords.y) {
@@ -156,7 +173,11 @@ const findAim = (array, coords) => {
   });
 
   if (index >= 0) {
-    array.splice(index, 1);
+    if (array[index].super && array[index].superColorCounter < 8) {
+      METAMORPHOSIS(array[index]);
+    } else {
+      array.splice(index, 1);
+    }
   }
 };
 
@@ -457,7 +478,11 @@ export const GET_PRIZE = (x, y, w, color, name) => {
   CTX.lineTo(x - 1 - 0.33 * w, y - 1.26 * w);
   CTX.closePath();
   CTX.fill();
-  CTX.fillStyle = "blue";
+  const colorIndex =
+    Object.values(COLORS).findIndex((col) => col === color) + 1;
+  const symbolColor =
+    Object.values(COLORS)[Object.values(COLORS).length - colorIndex];
+  CTX.fillStyle = symbolColor;
   CTX.font = `bold ${w * 1.3}px monospace`;
   CTX.fillText(name[0].toUpperCase(), x - w / 2.5, y + 0.2 * w);
 };
