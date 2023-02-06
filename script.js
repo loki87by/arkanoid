@@ -1,12 +1,13 @@
 import {
-  WIDTH,
   HEIGHT,
-  BODY,
+  POINT,
   CANVAS,
   CTX,
-  DATA,
   SCORE,
-  ARTICLE,
+  SPEED,
+  LEVEL,
+  HISCORE,
+  SCREEN_SIZE,
   POPUP,
   BUTTON,
   BASIC_TIME,
@@ -20,11 +21,12 @@ import {
   METAMORPHOSIS,
   DETONATE,
   GET_PRIZE,
+  GET_BOMB,
+  FLASH_WAVE,
   NEW_RANDOM_LEWEL,
 } from "./consts.js";
 
-CANVAS.setAttribute("height", HEIGHT);
-CANVAS.setAttribute("width", HEIGHT / 1.25);
+SCREEN_SIZE()
 
 const requestAnimationFrame =
   window.requestAnimationFrame ||
@@ -55,8 +57,7 @@ const ball = {
   diameter: GET_SIZE(5),
   height: GET_SIZE(5),
   width: GET_SIZE(5),
-  radius: GET_SIZE(5) / 2,
-  speed: 2,
+  speed: 2 * POINT,
   dx: 0,
   dy: 0,
 };
@@ -66,7 +67,10 @@ const bricks = [];
 let level = 1;
 let lifes = 5;
 let score = 0;
+let splashCounter = 0;
+let splashes = null;
 let prizeName = "";
+let hiscore = 0;
 let timeCoefficient,
   gameOver,
   win,
@@ -77,23 +81,12 @@ let timeCoefficient,
   grab,
   doubleScore,
   bomb,
+  detonateCenter,
   prizeColor;
 
-if (HEIGHT < WIDTH) {
-  DATA.setAttribute(
-    "style",
-    `width: ${(WIDTH - HEIGHT / 1.25) / 2}px; left: ${
-      WIDTH - (WIDTH - HEIGHT / 1.25) / 2
-    }px`
-  );
-} else {
-  BODY.setAttribute("style", "align-items: flex-start");
-  DATA.setAttribute("style", `left: 0; top: ${GET_SIZE(454)}px; width: 100%;`);
-  ARTICLE.setAttribute("style", "flex-direction: row");
-  Array.from(document.querySelectorAll("h2")).forEach((subtitle) =>
-    subtitle.setAttribute("style", "margin: 0")
-  );
-}
+  if(localStorage.getItem('hiscore')) {
+    hiscore = localStorage.getItem('hiscore')
+  }
 
 function keydownHandler(e) {
   if (e.code === "ArrowLeft") {
@@ -135,13 +128,30 @@ function keyupHandler(e) {
   }
 }
 
+function setInfo() {
+  SCORE.textContent = `Счёт: ${score}`;
+  SPEED.textContent = `Скорость шара: ${ball.speed}`;
+  LEVEL.textContent = `Уровень: ${level}`;
+  HISCORE.textContent = `Рекорд: ${hiscore}`;
+  }
+
+function setInfo() {
+  SCORE.textContent = `Счёт: ${score}`;
+  SPEED.textContent = `Скорость шара: ${ball.speed}`;
+  LEVEL.textContent = `Уровень: ${level}`;
+  HISCORE.textContent = `Рекорд: ${hiscore}`;
+  }
+
 function reset() {
   timeCoefficient = BASIC_TIME - level * 5000;
   gameOver = false;
   win = false;
   isDropped = false;
+  berserk = false;
+  score = 0;
+  setInfo()
   timestamp = Date.now();
-  ball.speed = level / 5 + 1.8;
+  ball.speed = (level / 5 + 1.8) * POINT;
   const bricksLength = bricks.length;
   for (let i = 0; i < bricksLength; i++) {
     bricks.pop();
@@ -180,8 +190,6 @@ function restart() {
   reset();
   lifes = 5;
   SET_LIVES(lifes);
-  score = 0;
-  SCORE.textContent = `Счёт: ${score}`;
   BUTTON.removeEventListener("click", restart);
   POPUP.classList.remove("popup_opened");
   loop();
@@ -284,11 +292,10 @@ function loop() {
   } else {
     endGame();
   }
-
   CTX.clearRect(0, 0, CANVAS.width, CANVAS.height);
   paddle.x += paddle.dx;
-
   const time = Date.now();
+
   if (time >= timestamp + timeCoefficient) {
     timestamp = time;
     bricks.forEach((brick) => {
@@ -324,7 +331,7 @@ function loop() {
       ball.x + ball.width >=
       HEIGHT / 1.25 - wallSize - paddle.width / 2
     ) {
-      paddle.x = HEIGHT / 1.25 - wallSize - paddle.width
+      paddle.x = HEIGHT / 1.25 - wallSize - paddle.width;
     } else {
       paddle.x = ball.x - paddle.width / 2;
     }
@@ -397,15 +404,17 @@ function loop() {
       }
 
       if (bomb) {
-        bomb = false;
         resetBall();
-        DETONATE(
-          bricks,
-          bricks[i],
-          brickHeight + brickGap,
-          brickWidth + brickGap
-        );
-      } else if (brick.super && brick.superColorCounter < 8) {
+        if (splashCounter === 0) {
+          detonateCenter = bricks[i];
+          splashes = FLASH_WAVE(
+            detonateCenter.x + brickWidth / 2,
+            detonateCenter.y + brickHeight / 2,
+            brickWidth,
+            brickHeight
+          );
+        }
+      } else if (brick.super && brick.superColorCounter < 8 && !bomb) {
         METAMORPHOSIS(brick);
       } else {
         bricks.splice(i, 1);
@@ -424,13 +433,12 @@ function loop() {
           addLife();
         }
       }
-      SCORE.textContent = `Счёт: ${score}`;
 
-      if (bricks.length === 0) {
-        win = true;
-        endGame();
-        toStartPosition();
+      if(localStorage.getItem('hiscore') < score) {
+        localStorage.setItem('hiscore', score)
+        hiscore = score
       }
+      setInfo()
 
       if (
         ball.y + ball.height - ball.speed <= brick.y ||
@@ -473,6 +481,46 @@ function loop() {
   CTX.arc(ball.x, ball.y, ball.diameter, 0, 2 * Math.PI);
   CTX.fill();
   CTX.closePath();
+
+  if (splashes) {
+    splashCounter++;
+    for (let i = 0; i < splashCounter; i++) {
+      GET_BOMB(
+        detonateCenter.x,
+        detonateCenter.y,
+        brickWidth,
+        brickHeight,
+        brickGap,
+        i
+      );
+      CTX.strokeStyle = "black";
+
+      if (i <= splashCounter) {
+        CTX.beginPath();
+        eval(`CTX.arc(${splashes[Math.floor(i)].join(", ")})`);
+        CTX.closePath()
+      }
+      CTX.stroke();
+    }
+
+    if (splashCounter >= 7) {
+      splashCounter = 0;
+      bomb = false;
+      splashes = null;
+      DETONATE(
+        bricks,
+        detonateCenter,
+        brickHeight + brickGap,
+        brickWidth + brickGap
+      );
+    }
+  }
+
+  if (bricks.length === 0) {
+    win = true;
+    endGame();
+    toStartPosition();
+  }
 }
 
 document.addEventListener("keydown", keydownHandler);

@@ -1,12 +1,15 @@
 const height = window.innerHeight;
 export const WIDTH = window.innerWidth;
 export const HEIGHT = Math.floor(height / 50) * 50;
-const point = HEIGHT / 500;
+export const POINT = HEIGHT / 500;
 export const BODY = document.querySelector("body");
 export const CANVAS = document.querySelector("canvas");
 export const CTX = CANVAS.getContext("2d");
 export const DATA = document.getElementById("data");
 export const SCORE = document.getElementById("score");
+export const SPEED = document.getElementById("speed");
+export const LEVEL = document.getElementById("level");
+export const HISCORE = document.getElementById("hiscore");
 export const ARTICLE = document.querySelector("article");
 const LIFES = document.getElementById("lifes");
 export const POPUP = document.getElementById("popup");
@@ -74,6 +77,18 @@ const SUPER_COLORS = [
   "yellow",
 ];
 
+export const BONUSES = [
+  "auto",
+  "bomb",
+  "doubleScore",
+  "grab",
+  "life",
+  "rise",
+  "slowDown",
+  "wide",
+  "up"
+];
+
 export const NEW_RANDOM_LEWEL = (num) => {
   const colors = Object.keys(COLORS);
   colors.sort()
@@ -112,21 +127,30 @@ export const NEW_RANDOM_LEWEL = (num) => {
   LEVELS.push(res);
 };
 
-export const BONUSES = [
-  "auto",
-  "bomb",
-  "doubleScore",
-  "grab",
-  "life",
-  "rise",
-  "slowDown",
-  "wide",
-  "up",
-];
-
 export const GET_SIZE = (num) => {
-  return Math.floor(num * point);
+  return Math.floor(num * POINT);
 };
+
+export const SCREEN_SIZE = () => {
+CANVAS.setAttribute("height", HEIGHT);
+CANVAS.setAttribute("width", HEIGHT / 1.25);
+
+if (HEIGHT < WIDTH) {
+  DATA.setAttribute(
+    "style",
+    `width: ${(WIDTH - HEIGHT / 1.25) / 2}px; left: ${
+      WIDTH - (WIDTH - HEIGHT / 1.25) / 2
+    }px`
+  );
+} else {
+  BODY.setAttribute("style", "align-items: flex-start");
+  DATA.setAttribute("style", `left: 0; top: ${GET_SIZE(454)}px; width: 100%;`);
+  ARTICLE.setAttribute("style", "flex-direction: row");
+  Array.from(document.querySelectorAll("h2")).forEach((subtitle) =>
+    subtitle.setAttribute("style", "margin: 0")
+  );
+}
+}
 
 export const COLLIDES = (obj1, obj2) => {
   return (
@@ -481,3 +505,51 @@ export const GET_PRIZE = (x, y, w, color, name) => {
   CTX.font = `bold ${w * 1.3}px monospace`;
   CTX.fillText(name[0].toUpperCase(), x - w / 2.5, y + 0.2 * w);
 };
+
+export const GET_BOMB = (startX, startY, w, h, g, i) => {
+  const x = startX + w / 2
+  const y = startY + h / 2
+  const gradient = CTX.createRadialGradient(x, y, w / 8, x, y, w * 2);
+  gradient.addColorStop(0, "red");
+  gradient.addColorStop(i / 20, "orange");
+  gradient.addColorStop(i / 10, "yellow");
+  gradient.addColorStop(1, "white");
+  CTX.fillStyle = gradient;
+  CTX.beginPath();
+  CTX.moveTo(x - .75 * (w + g), y - 1 * h);
+  CTX.lineTo(x, y - 2.5 * h);
+  CTX.lineTo(x + .75 * w, y - 1 * (h + g));
+  CTX.lineTo(x + 1.25 * w, y - 1.5 * h);
+  CTX.lineTo(x + 1 * w, y - .5 * (h + g));
+  CTX.lineTo(x + 1.5 * w, y - .75 * (h + g));
+  CTX.lineTo(x + 1.25 * (w + g), y - .25 * h);
+  CTX.lineTo(x + 2.5 * w, y + .25 * h);
+  CTX.lineTo(x + 1.25 * (w + g), y + .75 * h);
+  CTX.lineTo(x + 1.5 * w, y + 1.25 * (h + g))
+  CTX.lineTo(x + 1 * w, y + 1 * (h + g));
+  CTX.lineTo(x + 1.25 * w, y + 2 * h);
+  CTX.lineTo(x + .75 * w, y + 1.5 * (h + g));
+  CTX.lineTo(x, y + 3 * h);
+  CTX.lineTo(x - .75 * w, y + 1.75 * h);
+  CTX.lineTo(x - 1.25 * w, y + 2 * h);
+  CTX.lineTo(x - 1 * (w + g), y + 1 * (h + g));
+  CTX.lineTo(x - 1.5 * (w + g), y + 1.25 * (h + g))
+  CTX.lineTo(x - 1.25 * (w + g), y + .75 * h);
+  CTX.lineTo(x - 2.5 * (w + g), y + .25 * h);
+  CTX.lineTo(x - 1.25 * (w + g), y - .25 * h);
+  CTX.lineTo(x - 1.5 * (w + g), y - .75 * (h + g));
+  CTX.lineTo(x - 1 * (w + g), y - .5 * (h + g));
+  CTX.lineTo(x - 1.25 * (w + g), y - 1.5 * h);
+  CTX.closePath();
+  CTX.fill();
+}
+
+export const FLASH_WAVE = (x, y, w, h) => {
+  const arr = []
+  for(let i=0; i<7; i++) {
+    const rad = Math.PI * Math.floor(Math.random() * 2) / Math.ceil(Math.random() * 8)
+    const item = [x, y, h + Math.random() * (w - h), rad, rad * 2]
+    arr.push(item)
+  }
+  return arr
+}
