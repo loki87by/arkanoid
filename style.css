@@ -17,7 +17,8 @@ body {
   justify-content: center;
 }
 
-#data {
+#data,
+#info {
   position: fixed;
   top: 0;
   z-index: 1;
@@ -34,6 +35,11 @@ body {
   background: black;
 }
 
+#info {
+  left: 0;
+  overflow-y: scroll;
+}
+
 .lifes {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -48,13 +54,31 @@ body {
 }
 
 h1,
-h2 {
-text-align: center;
+h2,
+h3,
+h4,
+span {
+  text-align: center;
   color: white;
 }
 
 h1 {
   font-size: 10vh;
+}
+
+h3,
+h4 {
+  margin: 0;
+}
+
+h3 {
+  margin-top: 5vh;
+  margin-bottom: 10px;
+}
+
+span {
+  margin-right: 10px;
+  text-transform: capitalize;
 }
 
 #lifes {
@@ -111,4 +135,8 @@ img {
 
 button {
   cursor: pointer;
+}
+
+.hidden {
+  display: none !important;
 }

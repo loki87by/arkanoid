@@ -26,7 +26,7 @@ import {
   NEW_RANDOM_LEWEL,
 } from "./consts.js";
 
-SCREEN_SIZE()
+SCREEN_SIZE();
 
 const requestAnimationFrame =
   window.requestAnimationFrame ||
@@ -84,9 +84,9 @@ let timeCoefficient,
   detonateCenter,
   prizeColor;
 
-  if(localStorage.getItem('hiscore')) {
-    hiscore = localStorage.getItem('hiscore')
-  }
+if (localStorage.getItem("hiscore")) {
+  hiscore = localStorage.getItem("hiscore");
+}
 
 function keydownHandler(e) {
   if (e.code === "ArrowLeft") {
@@ -137,10 +137,10 @@ function setInfo() {
 
 function setInfo() {
   SCORE.textContent = `Счёт: ${score}`;
-  SPEED.textContent = `Скорость шара: ${ball.speed}`;
+  SPEED.textContent = `Скорость шара: ${Math.round(ball.speed * 10)}`;
   LEVEL.textContent = `Уровень: ${level}`;
   HISCORE.textContent = `Рекорд: ${hiscore}`;
-  }
+}
 
 function reset() {
   timeCoefficient = BASIC_TIME - level * 5000;
@@ -148,8 +148,6 @@ function reset() {
   win = false;
   isDropped = false;
   berserk = false;
-  score = 0;
-  setInfo()
   timestamp = Date.now();
   ball.speed = (level / 5 + 1.8) * POINT;
   const bricksLength = bricks.length;
@@ -158,6 +156,7 @@ function reset() {
   }
   prizeColor = "";
   prizeName = "";
+  setInfo();
 
   for (let row = 0; row < LEVELS[level - 1].length; row++) {
     for (let col = 0; col < LEVELS[level - 1][row].length; col++) {
@@ -187,6 +186,7 @@ function addLife() {
 function restart() {
   CTX.clearRect(0, 0, CANVAS.width, CANVAS.height);
   level = 1;
+  score = 0;
   reset();
   lifes = 5;
   SET_LIVES(lifes);
@@ -434,11 +434,11 @@ function loop() {
         }
       }
 
-      if(localStorage.getItem('hiscore') < score) {
-        localStorage.setItem('hiscore', score)
-        hiscore = score
+      if (localStorage.getItem("hiscore") < score) {
+        localStorage.setItem("hiscore", score);
+        hiscore = score;
       }
-      setInfo()
+      setInfo();
 
       if (
         ball.y + ball.height - ball.speed <= brick.y ||
@@ -495,11 +495,11 @@ function loop() {
       );
       CTX.strokeStyle = "black";
 
-      if (i <= splashCounter) {
-        CTX.beginPath();
-        eval(`CTX.arc(${splashes[Math.floor(i)].join(", ")})`);
-        CTX.closePath()
-      }
+      //if (i <= splashCounter) {
+      CTX.beginPath();
+      eval(`CTX.arc(${splashes[Math.floor(i)].join(", ")})`);
+      CTX.closePath();
+      //}
       CTX.stroke();
     }
 
