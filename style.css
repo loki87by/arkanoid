@@ -37,7 +37,24 @@ body {
 
 #info {
   left: 0;
-  overflow-y: scroll;
+  overflow-y: auto;
+}
+
+#info::-webkit-scrollbar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  width: 5px;
+}
+
+#info::-webkit-scrollbar-track {
+  background: #000;
+}
+
+#info::-webkit-scrollbar-thumb {
+  background-color: #696969;
+  border: 1px solid #fff;
 }
 
 .lifes {

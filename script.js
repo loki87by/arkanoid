@@ -151,6 +151,7 @@ function reset() {
   timestamp = Date.now();
   ball.speed = (level / 5 + 1.8) * POINT;
   const bricksLength = bricks.length;
+
   for (let i = 0; i < bricksLength; i++) {
     bricks.pop();
   }
@@ -161,6 +162,7 @@ function reset() {
   for (let row = 0; row < LEVELS[level - 1].length; row++) {
     for (let col = 0; col < LEVELS[level - 1][row].length; col++) {
       const colorCode = LEVELS[level - 1][row][col];
+
       if (colorCode !== "") {
         bricks.push({
           x: wallSize + (brickWidth + brickGap) * col,
@@ -215,6 +217,7 @@ function endGame() {
   if (gameOver) {
     SHOW_POPUP("Game over!", "Попробовать еще раз", restart);
   }
+
   if (win) {
     SHOW_POPUP("You win!", "Следующий уровень", newGame);
   }
@@ -405,6 +408,7 @@ function loop() {
 
       if (bomb) {
         resetBall();
+
         if (splashCounter === 0) {
           detonateCenter = bricks[i];
           splashes = FLASH_WAVE(
@@ -484,6 +488,7 @@ function loop() {
 
   if (splashes) {
     splashCounter++;
+
     for (let i = 0; i < splashCounter; i++) {
       GET_BOMB(
         detonateCenter.x,
@@ -494,12 +499,9 @@ function loop() {
         i
       );
       CTX.strokeStyle = "black";
-
-      //if (i <= splashCounter) {
       CTX.beginPath();
       eval(`CTX.arc(${splashes[Math.floor(i)].join(", ")})`);
       CTX.closePath();
-      //}
       CTX.stroke();
     }
 
