@@ -94,6 +94,7 @@ export const NEW_RANDOM_LEWEL = (num) => {
   const colors = Object.keys(COLORS);
   colors.sort();
   const len = colors.length;
+
   for (let i = len - 2; i >= 0; i--) {
     const shortArray = colors.slice(0, i);
     shortArray.forEach((item) => {
@@ -112,6 +113,7 @@ export const NEW_RANDOM_LEWEL = (num) => {
 
   for (let r = 0; r < limit; r++) {
     const half = [];
+
     for (let i = 0; i < 7; i++) {
       half.push(colors[Math.floor(Math.random() * colors.length)]);
     }
@@ -175,6 +177,7 @@ export const SET_LIVES = (lifes) => {
   Array.from(LIFES.children)
     .slice(1)
     .forEach((img) => img.remove());
+
   for (let i = 0; i < lifes; i++) {
     const svg = LIFES.children[0].content.querySelector("img").cloneNode(true);
     LIFES.appendChild(svg);
@@ -556,6 +559,7 @@ export const GET_BOMB = (startX, startY, w, h, g, i) => {
 
 export const FLASH_WAVE = (x, y, w, h) => {
   const arr = [];
+
   for (let i = 0; i < 7; i++) {
     const rad =
       (Math.PI * Math.floor(Math.random() * 2)) / Math.ceil(Math.random() * 8);
