@@ -62,6 +62,14 @@ const ball = {
   dy: 0,
 };
 
+const prize = {
+  x: null,
+  y: null,
+  width: brickWidth,
+  height: brickHeight,
+  dy: 1,
+};
+
 const bricks = [];
 
 let level = 1;
@@ -128,12 +136,17 @@ function keyupHandler(e) {
   }
 }
 
-function setInfo() {
-  SCORE.textContent = `Счёт: ${score}`;
-  SPEED.textContent = `Скорость шара: ${ball.speed}`;
-  LEVEL.textContent = `Уровень: ${level}`;
-  HISCORE.textContent = `Рекорд: ${hiscore}`;
-  }
+function resetPaddle() {
+  paddle.x = paddle.basicX;
+  paddle.y = paddle.basicY;
+  paddle.width = brickWidth;
+}
+
+function resetBall() {
+  ball.width = GET_SIZE(5);
+  ball.height = GET_SIZE(5);
+  ball.diameter = GET_SIZE(5);
+}
 
 function setInfo() {
   SCORE.textContent = `Счёт: ${score}`;
@@ -143,9 +156,15 @@ function setInfo() {
 }
 
 function reset() {
+  resetPaddle();
+  resetBall();
   timeCoefficient = BASIC_TIME - level * 5000;
   gameOver = false;
   win = false;
+  grab = false;
+  bomb = false;
+  doubleScore = false;
+  autopilot = false;
   isDropped = false;
   berserk = false;
   timestamp = Date.now();
@@ -317,8 +336,8 @@ function loop() {
 
   if (paddle.x < wallSize) {
     paddle.x = wallSize;
-  } else if (paddle.x + brickWidth > CANVAS.width - wallSize) {
-    paddle.x = CANVAS.width - wallSize - brickWidth;
+  } else if (paddle.x + paddle.width > CANVAS.width - wallSize) {
+    paddle.x = CANVAS.width - wallSize - paddle.width;
   }
   ball.x += ball.dx;
   ball.y += ball.dy;
@@ -357,6 +376,8 @@ function loop() {
     toStartPosition();
     lifes--;
     SET_LIVES(lifes);
+    berserk = false;
+    resetPaddle();
 
     if (lifes === 0) {
       gameOver = true;
@@ -445,8 +466,8 @@ function loop() {
       setInfo();
 
       if (
-        ball.y + ball.height - ball.speed <= brick.y ||
-        ball.y >= brick.y + brick.height - ball.speed
+        (!berserk && ball.y + ball.height - ball.speed <= brick.y) ||
+        (ball.y >= brick.y + brick.height - ball.speed && !berserk)
       ) {
         ball.dy *= -1;
       } else {
