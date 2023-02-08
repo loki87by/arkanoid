@@ -7,4 +7,4 @@
 - Отрисовка сложных фигур
 - И немного по мелочам
 
-Деплой (тут)[https://loki87by.github.io/arkanoid/]
+Деплой [тут](https://loki87by.github.io/arkanoid/)

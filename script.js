@@ -33,6 +33,7 @@ const requestAnimationFrame =
   window.mozRequestAnimationFrame ||
   window.webkitRequestAnimationFrame ||
   window.msRequestAnimationFrame;
+window.msRequestAnimationFrame;
 
 const brickGap = GET_SIZE(2);
 const brickWidth = GET_SIZE(25);
