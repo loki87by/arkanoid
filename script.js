@@ -72,7 +72,7 @@ const prize = {
 
 const bricks = [];
 
-let level = 1;
+let level = 2;
 let lifes = 5;
 let score = 0;
 let splashCounter = 0;
@@ -439,8 +439,8 @@ function loop() {
             brickHeight
           );
         }
-      } else if (brick.super && brick.superColorCounter < 8 && !bomb) {
-        METAMORPHOSIS(brick);
+      } else if (brick.super && brick.superColorCounter < 8) {
+        METAMORPHOSIS(brick, bomb, bricks);
       } else {
         bricks.splice(i, 1);
       }

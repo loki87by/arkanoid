@@ -79,15 +79,15 @@ const SUPER_COLORS = [
 ];
 
 export const BONUSES = [
-  "auto",
+  //"auto",
   "bomb",
-  "doubleScore",
+  /* "doubleScore",
   "grab",
   "life",
   "rise",
   "slowDown",
   "wide",
-  "up",
+  "up", */
 ];
 
 export const NEW_RANDOM_LEWEL = (num) => {
@@ -190,7 +190,7 @@ export const SHOW_POPUP = (title, text, func) => {
   BUTTON.addEventListener("click", func);
 };
 
-export const METAMORPHOSIS = (brick) => {
+export const METAMORPHOSIS = (brick, bomb, bricks) => {
   brick.superColorCounter = brick.superColorCounter + 1;
   brick.color = SUPER_COLORS[brick.superColorCounter];
 };
@@ -203,11 +203,7 @@ const findAim = (array, coords) => {
   });
 
   if (index >= 0) {
-    if (array[index].super && array[index].superColorCounter < 8) {
-      METAMORPHOSIS(array[index]);
-    } else {
-      array.splice(index, 1);
-    }
+    array.splice(index, 1);
   }
 };
 

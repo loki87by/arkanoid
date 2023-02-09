@@ -73,10 +73,14 @@ body {
 h1,
 h2,
 h3,
-h4,
-span {
+h4 {
   text-align: center;
   color: white;
+}
+
+h3,
+span {
+  color: rgb(233, 192, 60);
 }
 
 h1 {
