@@ -72,7 +72,7 @@ const prize = {
 
 const bricks = [];
 
-let level = 2;
+let level = 1;
 let lifes = 5;
 let score = 0;
 let splashCounter = 0;
